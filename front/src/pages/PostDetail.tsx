@@ -4,6 +4,7 @@ import { client } from '../sanity/sanityClient'
 import { Post } from './Home'
 import { PortableText } from '@portabletext/react'
 import { customPortableTextComponents } from '../components/PortableTextComponents'
+import { WeatherSection } from '../components/WeatherSection'
 import { urlFor } from '../utils/urlFor'
 
 
@@ -101,7 +102,7 @@ export default function PostDetail() {
           )}
         </div>
       )}
-
+<WeatherSection/>
       <div style={{ lineHeight: '1.7', fontSize: '1.1rem', color: '#334155' }}>
         {post.body ? (
           <PortableText value={post.body} components={customPortableTextComponents} />
