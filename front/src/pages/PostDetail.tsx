@@ -1,51 +1,35 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
+import { PortableText } from '@portabletext/react'
 import { client } from '../sanity/sanityClient'
 import { Post } from './Home'
-import { PortableText } from '@portabletext/react'
 import { customPortableTextComponents } from '../components/PortableTextComponents'
-import { WeatherSection } from '../components/WeatherSection'
+import TripWeather from '../components/TripWeather'
 import { urlFor } from '../utils/urlFor'
 
-
-interface WeatherData {
-  temperature: number
-  windspeed: number
-  weathercode: number
+interface Location {
+  lng: number
+  lat: number
 }
 
 export default function PostDetail() {
   const { id } = useParams<{ id: string }>()
   const [post, setPost] = useState<Post | null>(null)
-  const [weather, setWeather] = useState<WeatherData | null>(null)
   const [loading, setLoading] = useState(true)
+  const [location, setLocation] = useState<Location | null>(null)
 
   useEffect(() => {
-    // 1. Fetch Post from Sanity
     client
-    .fetch(`*[_type == "post" && _id == $id][0]{ _id, title, body, locationDetails, mainImage }`, { id })
+      .fetch(
+        `*[_type == "post" && _id == $id][0]{ _id, title, body, locationDetails, mainImage }`,
+        { id }
+      )
       .then((data: Post) => {
         setPost(data)
-        setLoading(false)
-
-        // 2. Fetch Current Weather if coordinates exist
         if (data?.locationDetails?.lat && data?.locationDetails?.lng) {
-          const { lat, lng } = data.locationDetails
-          fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`
-          )
-            .then((res) => res.json())
-            .then((weatherRes) => {
-              if (weatherRes.current_weather) {
-                setWeather({
-                  temperature: weatherRes.current_weather.temperature,
-                  windspeed: weatherRes.current_weather.windspeed,
-                  weathercode: weatherRes.current_weather.weathercode,
-                })
-              }
-            })
-            .catch(console.error)
+          setLocation(data.locationDetails)
         }
+        setLoading(false)
       })
       .catch((err) => {
         console.error(err)
@@ -53,57 +37,28 @@ export default function PostDetail() {
       })
   }, [id])
 
-  if (loading) return <p>Loading post...</p>
-  if (!post) return <p>Post not found.</p>
+  if (loading) return <p style={styles.statusText}>Loading post...</p>
+  if (!post) return <p style={styles.statusText}>Post not found.</p>
 
   return (
-    <div>
-      <Link to="/" style={{ color: '#2563eb', textDecoration: 'none' }}>
+    <div style={styles.container}>
+      <Link to="/" style={styles.backLink}>
         ← Back to All Posts
       </Link>
 
-      <h1 style={{ marginTop: '1rem' }}>{post.title}</h1>
-        {post.mainImage && post.mainImage.asset && (
+      <h1 style={styles.title}>{post.title}</h1>
+
+      {post.mainImage?.asset && (
         <img
-          // Use urlFor to generate the source, define a width, and auto-format to WebP
           src={urlFor(post.mainImage).width(1200).height(600).url()}
           alt={post.title}
-          style={{
-            width: '100%',
-            height: 'auto',
-            maxHeight: '400px',
-            objectFit: 'cover',
-            borderRadius: '12px',
-            marginTop: '1.5rem',
-            boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
-          }}
+          style={styles.heroImage}
         />
       )}
-      {/* Weather Widget Section */}
-      {post.locationDetails && (
-        <div
-          style={{
-            background: '#f8fafc',
-            padding: '1rem',
-            borderRadius: '8px',
-            borderLeft: '4px solid #2563eb',
-            margin: '1.5rem 0',
-          }}
-        >
-          <h3 style={{ margin: 0 }}>
-            Live Weather in {post.locationDetails.cityName}, {post.locationDetails.countryName}
-          </h3>
-          {weather ? (
-            <p style={{ margin: '0.5rem 0 0 0', fontSize: '1.1rem' }}>
-              🌡️ <strong>{weather.temperature}°C</strong> | 💨 Wind: {weather.windspeed} km/h
-            </p>
-          ) : (
-            <p style={{ margin: '0.5rem 0 0 0', color: '#64748b' }}>Fetching weather data...</p>
-          )}
-        </div>
-      )}
-<WeatherSection/>
-      <div style={{ lineHeight: '1.7', fontSize: '1.1rem', color: '#334155' }}>
+
+      {location && <TripWeather location={location} />}
+
+      <div style={styles.bodyContent}>
         {post.body ? (
           <PortableText value={post.body} components={customPortableTextComponents} />
         ) : (
@@ -112,4 +67,47 @@ export default function PostDetail() {
       </div>
     </div>
   )
+}
+
+// ==========================================
+// STYLES OBJECT
+// ==========================================
+
+const styles: Record<string, React.CSSProperties> = {
+  container: {
+    maxWidth: '800px',
+    margin: '0 auto',
+    padding: '1rem',
+  },
+  backLink: {
+    color: '#2563eb',
+    textDecoration: 'none',
+    fontWeight: 500,
+  },
+  title: {
+    marginTop: '1rem',
+    color: '#0f172a',
+    fontSize: '2.25rem',
+    lineHeight: '1.2',
+  },
+  heroImage: {
+    width: '100%',
+    height: 'auto',
+    maxHeight: '400px',
+    objectFit: 'cover',
+    borderRadius: '12px',
+    marginTop: '1.5rem',
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+  },
+  bodyContent: {
+    lineHeight: '1.7',
+    fontSize: '1.1rem',
+    color: '#334155',
+    marginTop: '1.5rem',
+  },
+  statusText: {
+    color: '#64748b',
+    padding: '2rem',
+    textAlign: 'center',
+  },
 }
