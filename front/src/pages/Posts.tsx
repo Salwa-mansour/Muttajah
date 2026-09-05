@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { client } from '../sanity/sanityClient'
 import { urlFor } from '../utils/urlFor'
+// import '/css/index.css'
 
 export interface Post {
   _id: string
@@ -18,7 +19,7 @@ export interface Post {
   }
 }
 
-export default function Home() {
+export default function Posts() {
   const [posts, setPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
 
