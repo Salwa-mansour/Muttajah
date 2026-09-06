@@ -5,11 +5,7 @@
 .features{
     position: relative;
      background-image: 
-       linear-gradient(
-            to bottom,
-            rgba(253, 248, 240, 0.88) 0%,   /* Soft warm cream top */
-            rgba(245, 238, 225, 0.68) 100%   /* Subtle warm haze bottom */
-        ),
+       
         url('../assets/taylor-van-riper-yQorCngxzwI-unsplash.jpg');
 
     background-size: cover;
@@ -22,6 +18,7 @@
     left: 0;
     top: 50%;
     transform: translateY(-50%);
+    z-index: 15;
 }
 .curve-path{
     display: none;
@@ -30,10 +27,12 @@
   height: 100%;
 }
 .features-container{
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    z-index: 15;
 }
 .feature {
     position: relative;
@@ -81,7 +80,44 @@
 }
 
 /* Put the rain behind the cloud and hide it initially */
-.rain-path {
+.rain-path,
+.snow-path {
   z-index: 1;
-  opacity: 0; /* Hidden initially */
+ 
+}
+
+.bg-overlays {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    pointer-events: none;
+    overflow: hidden;
+}
+.motion-background{
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 20;
+}
+.bg-gradient {
+  position: absolute;
+  inset: 0;
+ 
+  transition: opacity 0.1s linear;
+}
+.sun-bg {
+  background: linear-gradient(
+            to bottom,
+            rgba(253, 248, 240, 0.88) 0%,   rgba(245, 238, 225, 0.68) 100%   
+        );
+}
+
+/* ☁️ Cloudy: Soft Gray/Blue Gradient */
+.cloudy-bg {
+  background: linear-gradient(180deg, rgb(28 77 94 / 68%) 0%, rgb(9 43 57 / 79%) 100%);
+     opacity: 0;/*  Control transition via GSAP */
 }

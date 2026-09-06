@@ -64,49 +64,232 @@ function Features() {
         },
       });
     });
+    // =======================
+    gsap.set(".rain-path", { yPercent: -30, opacity: 0 });
+    gsap.set(".snow-path", { yPercent: -30, opacity: 0 });
+    gsap.set(".cloud-path", { xPercent: -30,opacity: 0 });
 
-    // 2. Motion Path Scroll Timeline (Sun & Cloud follow the path on scroll)
-  const pathTl = gsap.timeline({
+  const sunTl = gsap.timeline({
     scrollTrigger: {
-      trigger: containerRef.current, // Pin or track progress across the entire section
-     start: 'top 50%',        // Starts when top of section hits top of viewport
-     end: 'bottom bottom',    // Extends scroll distance across the whole section height
-     scrub: 1,
-      markers:true
+      trigger:featureCards[0] , // Pin or track progress across the entire section
+     start: 'top bottom',        // Starts when top of section hits top of viewport
+     end: 'top-=100 70%',    // Extends scroll distance across the whole section height
+     scrub: 2,
+    //   markers:true
     },
   })
 
   // Move the Sun from start to end along the curve path
-  pathTl.to(
+    sunTl.to(
     '.sun-icon-item',
     {
       motionPath: {
         path: '#linerPath',
         align: '#linerPath',
         alignOrigin: [0.5, 0.5], // Center icon on path
+        start:0,
+        end:.2,
         autoRotate: false,
       },
       ease: 'none',
     },
     0 // Starts at timeline position 0
   )
+  const cloudSunTl = gsap.timeline({
+    scrollTrigger: {
+      trigger:featureCards[1] , // Pin or track progress across the entire section
+     start: 'top bottom',        // Starts when top of section hits top of viewport
+     end: 'top-=100 50%',    // Extends scroll distance across the whole section height
+     scrub: 2,
+      markers:true
+    },
+  })
 
-  // Move the Cloud slightly offset along the path
-  pathTl.to(
+  // Move the Sun from start to end along the curve path
+    cloudSunTl.to(
     '.cloud-icon-item',
     {
       motionPath: {
         path: '#linerPath',
         align: '#linerPath',
-        alignOrigin: [0.5, 0.5],
-        start: 0.1, // Offset start position on path (10% ahead)
-        end: 1,
+        alignOrigin: [0.5, 0.5], // Center icon on path
+        start:.2,
+        end:.45,
         autoRotate: false,
       },
       ease: 'none',
     },
-    0 // Runs concurrently with the sun animation
+    0 // Starts at timeline position 0
   )
+    cloudSunTl.to(
+    '.sun-icon-item',
+    {
+      motionPath: {
+        path: '#linerPath',
+        align: '#linerPath',
+        alignOrigin: [0.5, 0.5], // Center icon on path
+        start:.2,
+        end:.45,
+        autoRotate: false,
+      },
+      ease: 'none',
+    },
+    0 // Starts at timeline position 0
+  )
+  cloudSunTl.to('.cloud-path',{
+    opacity:1,
+    duration: 0.05
+  },0)
+  cloudSunTl.to('.cloud-path',{
+    xPercent: 0
+  },0)
+   cloudSunTl.to('.sun-icon-item',{
+    opacity:0,
+    duration: 0.05
+  })
+//   ===============
+ const cloudTl = gsap.timeline({
+    scrollTrigger: {
+      trigger:featureCards[2] , // Pin or track progress across the entire section
+     start: 'top bottom',        // Starts when top of section hits top of viewport
+     end: 'top-=100 50%',    // Extends scroll distance across the whole section height
+     scrub: 2,
+      markers:true
+    },
+  })
+    cloudTl.to(
+    '.cloud-icon-item',
+    {
+      motionPath: {
+        path: '#linerPath',
+        align: '#linerPath',
+        alignOrigin: [0.5, 0.5], // Center icon on path
+        start:.45,
+        end:.65,
+        autoRotate: false,
+      },
+      ease: 'none',
+    },
+    0 // Starts at timeline position 0
+  )
+//   ===============
+ const rainyTl = gsap.timeline({
+    scrollTrigger: {
+      trigger:featureCards[3] , // Pin or track progress across the entire section
+     start: 'top bottom',        // Starts when top of section hits top of viewport
+     end: 'top-=100 50%',    // Extends scroll distance across the whole section height
+     scrub: 2,
+    
+    },
+  })
+    rainyTl.to(
+    '.cloud-icon-item',
+    {
+      motionPath: {
+        path: '#linerPath',
+        align: '#linerPath',
+        alignOrigin: [0.5, 0.5], // Center icon on path
+        start:.65,
+        end:.87,
+        autoRotate: false,
+      },
+      ease: 'none',
+    },
+    0 // Starts at timeline position 0
+  )
+   rainyTl.to('.cloudy-bg',{
+    opacity:1,
+  },0)
+   rainyTl.to('.rain-path',{
+    opacity:1,
+    duration: 0.05
+  },0)
+   rainyTl.to('.rain-path',{
+    yPercent:0,
+  },0)
+   rainyTl.to('.rain-path',{
+    opacity:0,
+    duration: 0.05
+  })
+    // 2. Motion Path Scroll Timeline (Sun & Cloud follow the path on scroll)
+//   ===============
+ const snowyTl = gsap.timeline({
+    scrollTrigger: {
+      trigger:featureCards[4] , // Pin or track progress across the entire section
+     start: 'top bottom',        // Starts when top of section hits top of viewport
+     end: 'top-=100 50%',    // Extends scroll distance across the whole section height
+     scrub: 2,
+      markers:true
+    },
+  })
+    snowyTl.to(
+    '.cloud-icon-item',
+    {
+      motionPath: {
+        path: '#linerPath',
+        align: '#linerPath',
+        alignOrigin: [0.5, 0.5], // Center icon on path
+        start:.87,
+        end:1,
+        autoRotate: false,
+      },
+      ease: 'none',
+    },
+    0 // Starts at timeline position 0
+  )
+   snowyTl.to('.snow-path',{
+    opacity:1,
+    duration: 0.05
+  },0)
+   snowyTl.to('.snow-path',{
+    yPercent:0,
+  },0)
+   snowyTl.to('.snow-path',{
+    opacity:0,
+    duration: 0.05
+  })
+    // 2. Motion Path Scroll Timeline (Sun & Cloud follow the path on scroll)
+//   const pathTl = gsap.timeline({
+//     scrollTrigger: {
+//       trigger: containerRef.current, // Pin or track progress across the entire section
+//      start: 'top 50%',        // Starts when top of section hits top of viewport
+//      end: 'bottom bottom',    // Extends scroll distance across the whole section height
+//      scrub: 1,
+//       markers:true
+//     },
+//   })
+
+//   // Move the Sun from start to end along the curve path
+//   pathTl.to(
+//     '.sun-icon-item',
+//     {
+//       motionPath: {
+//         path: '#linerPath',
+//         align: '#linerPath',
+//         alignOrigin: [0.5, 0.5], // Center icon on path
+//         autoRotate: false,
+//       },
+//       ease: 'none',
+//     },
+//     0 // Starts at timeline position 0
+//   )
+
+//   // Move the Cloud slightly offset along the path
+//   pathTl.to(
+//     '.cloud-icon-item',
+//     {
+//       motionPath: {
+//         path: '#linerPath',
+//         align: '#linerPath',
+//         alignOrigin: [0.5, 0.5],
+//         start: 0.1, // Offset start position on path (10% ahead)
+//         end: 1,
+//         autoRotate: false,
+//       },
+//       ease: 'none',
+//     },
+//     0 // Runs concurrently with the sun animation
+//   )
 
   };
     const desktopAnimations = ()=>{
@@ -191,6 +374,28 @@ function Features() {
     </g>
       
     </svg>
+    <svg viewBox="0 0 100 100" width="200" height="200" className="icon-path snow-path">
+      <g fill="#FFFFFF" stroke="#0284C7" strokeWidth="1">
+   
+    <circle cx="26" cy="53" r="2.5" />
+    <circle cx="23" cy="65" r="2" />
+    <circle cx="20" cy="77" r="2.5" />
+
+    <circle cx="41" cy="53" r="2" />
+    <circle cx="37" cy="66" r="3" />
+    <circle cx="33" cy="79" r="2" />
+
+  
+    <circle cx="56" cy="52" r="2.5" />
+    <circle cx="52" cy="64" r="2" />
+    <circle cx="48" cy="76" r="2.5" />
+
+
+    <circle cx="71" cy="54" r="2" />
+    <circle cx="67" cy="67" r="2.5" />
+    <circle cx="63" cy="80" r="2" />
+  </g>
+</svg>
   </div>
 
    
@@ -238,12 +443,10 @@ function Features() {
   </div>
 </div>{/* end-features-container */}
       <div className="bg-overlays">
-       Gradient Layers 
+       {/* Gradient Layers  */}
       <div className="bg-gradient sun-bg"></div>
       <div className="bg-gradient cloudy-bg"></div>
-      <div className="bg-gradient rainy-bg"></div>
-      <div className="bg-gradient snowy-bg"></div>
-
+     
 
     </div>
     <div className="motion-background">

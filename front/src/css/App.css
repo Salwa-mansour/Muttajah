@@ -7,13 +7,20 @@
 ul {
     list-style: none;
 }
-
+/* Quicksand - Inconsolata - Cutive Mono -Dosis */
+body{
+     font-family: "Quicksand", sans-serif;
+     font-weight: 200;
+}
 a {
     color: #fff;
     text-decoration: none;
-    font-family: sans-serif;
+    /* font-family: sans-serif; */
 }
-
+h1,h2,h3,h4,h5,h6{
+     font-family: "Cutive Mono", serif;
+     font-weight: 400;
+}
 nav {
     position: absolute;
     background-color: transparent;

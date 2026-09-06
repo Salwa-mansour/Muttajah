@@ -61,7 +61,7 @@
     z-index: 3; /* Places content above overlay */
     text-align: center;
     color: #ffffff;
-    font-family: sans-serif;
+    /* font-family: sans-serif; */
 }
 
 .hero-title {
