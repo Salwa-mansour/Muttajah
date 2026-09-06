@@ -1,0 +1,87 @@
+*{
+    outline:1px solid red;
+}
+
+.features{
+    position: relative;
+     background-image: 
+       linear-gradient(
+            to bottom,
+            rgba(253, 248, 240, 0.88) 0%,   /* Soft warm cream top */
+            rgba(245, 238, 225, 0.68) 100%   /* Subtle warm haze bottom */
+        ),
+        url('../assets/taylor-van-riper-yQorCngxzwI-unsplash.jpg');
+
+    background-size: cover;
+    background-position: bottom;
+    background-repeat: no-repeat;
+}
+.background{
+    position: absolute;
+    height: 80%;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.curve-path{
+    display: none;
+}
+.line-path{
+  height: 100%;
+}
+.features-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.feature {
+    position: relative;
+    width: 300px;
+    height: 250px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, .5);
+    margin-bottom: 2rem;
+}
+.feature img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+    border-radius:inherit;
+}
+.feature-content{
+    position:absolute;
+    top: 50px;
+    left:50%;
+    transform:translateX(-50%) translateY(50%);
+}
+.path-container{
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    top: 0;
+}
+.path-container svg{
+    width: 100%;
+    height: 100%;
+
+}
+.cloud-icon-item svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Put the cloud on top of the rain */
+.cloud-path {
+  z-index: 2;
+}
+
+/* Put the rain behind the cloud and hide it initially */
+.rain-path {
+  z-index: 1;
+  opacity: 0; /* Hidden initially */
+}

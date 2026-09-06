@@ -28,3 +28,7 @@ nav ul {
     align-items: center;
     padding: 20px 10%;
 }
+.section-headeing{
+    text-align: center;
+    padding-block: 3rem;
+}

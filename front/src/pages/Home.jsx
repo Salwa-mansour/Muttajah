@@ -1,15 +1,16 @@
 import { useRef } from 'react'
 import   gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'                    
 import '../css/home.css'
 import heroImage from '../assets/johannes-plenio-bhCdwWNmXw8-unsplash.jpg'
+import Features from '../components/Features'
 
 // Register plugins outside the component
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
 function Home() {
-  const containerRef = useRef(null)
+  const containerRef = useRef()
    
   useGSAP(
     () => {
@@ -25,7 +26,7 @@ function Home() {
           start: 'top top',
           end: 'bottom top',
           scrub: 1,
-          markers: true,
+       //   markers: true,
         },
       })
     
@@ -38,6 +39,7 @@ function Home() {
   )
 
   return (
+    <>
     <div ref={containerRef}>
       <section className="hero">
         <div className="hero-image-wrapper">
@@ -83,6 +85,8 @@ function Home() {
         </div>
       </section>
     </div>
+    <Features/>
+    </>
   )
 }
 
