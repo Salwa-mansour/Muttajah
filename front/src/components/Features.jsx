@@ -299,158 +299,155 @@ function Features() {
         });
       });
 
-        // --- A. INITIAL COMPONENT POSITIONING ---
-          gsap.set(".sun-icon-item", {
-            opacity: 0,
-            motionPath: {
-              path: "#weatherPath",
-              align: "#weatherPath",
-              alignOrigin: [0.5, 0.5],
-              start: 0,
-              end: 0
-            }
-          });
+// --- A. INITIAL COMPONENT POSITIONING ---
+gsap.set(".sun-icon-item", {
+  opacity: 0,
+  motionPath: {
+    path: "#weatherPath",
+    align: "#weatherPath",
+    alignOrigin: [0.5, 0.5],
+    start: 0,
+    end: 0
+  }
+});
 
-          gsap.set(".cloud-icon-item", {
-             opacity: 0,
-            motionPath: {
-              path: "#weatherPath",
-              align: "#weatherPath",
-              alignOrigin: [0.5, 0.5],
-              start: 0.2,
-              end: 0.2
-            }
-          });
-          // ☀️ 1. SUN TIMELINE
-          const sunTl = gsap.timeline({
-            scrollTrigger: {
-              trigger: allFeatures[0],
-              start: "top center",        
-              end: "center top",
-              scrub: 2,
-              invalidateOnRefresh: true
-            }
-          });
+gsap.set(".cloud-icon-item", {
+  opacity: 0,
+  motionPath: {
+    path: "#weatherPath",
+    align: "#weatherPath",
+    alignOrigin: [0.5, 0.5],
+    start: 0.2,
+    end: 0.2
+  }
+});
 
-          sunTl.to(".sun-icon-item", { opacity: 1, duration: 0.05 }, 0);
-          sunTl.to(".sun-icon-item", {
-            motionPath: {
-              path: "#weatherPath",
-              align: "#weatherPath",
-              alignOrigin: [0.5, 0.5],
-              start: 0,
-              end: 0.2
-            },
-            duration: 1, 
-            ease: "power2.out"
-          }, 0);
-          // ☁️ 🌞 2. CLOUDY SUN TIMELINE
-          const cloudySunTl = gsap.timeline({
-            scrollTrigger: {
-              trigger: allFeatures[1],
-              start: "top center",        
-              end: "center top",        
-              scrub: 2,
-              invalidateOnRefresh: true,
-            
-            }
-          });
-           cloudySunTl.to([".cloud-icon-item",".cloud-path"], { opacity: 1, duration: 0.05 }, 0);
-           cloudySunTl.to(".cloud-icon-item", {
-            motionPath: {
-              path: "#weatherPath",
-              align: "#weatherPath",
-              alignOrigin: [0.5, 0.5],
-              start: 0.2,
-              end: 0.47
-            },
-            duration: 1, 
-            ease: "power2.out"
-          }, 0);
-           cloudySunTl.to(".sun-icon-item", {
-            motionPath: {
-              path: "#weatherPath",
-              align: "#weatherPath",
-              alignOrigin: [0.5, 0.5],
-              start: 0.2,
-              end: 0.47
-            },
-            duration: 1, 
-            ease: "power2.out"
-          }, 0);
-            cloudySunTl.to('.cloud-path',{
-            xPercent:-20
-          },0);
-             cloudySunTl.to('.sun-icon-item',{
-              opacity:0,
-              duration: 0.05
-            });//reset
-             cloudySunTl.to('.cloud-path',{
-            xPercent:0,
-             duration: 0.05
-            });//reset
-                 // ☁️  2. CLOUDY TIMELINE
-          const cloudyTl = gsap.timeline({
-            scrollTrigger: {
-              trigger: allFeatures[2],
-              start: "top center",        
-              end: "center top",        
-              scrub: 2,
-              invalidateOnRefresh: true,
-          
-            }
-          });
-            cloudyTl.to(".cloud-icon-item", {
-            motionPath: {
-              path: "#weatherPath",
-              align: "#weatherPath",
-              alignOrigin: [0.5, 0.5],
-              start: 0.47,
-              end: 0.75
-            },
-            duration: 1, 
-            ease: "power2.out"
-          }, 0);
-           cloudyTl.to('.cloudy-bg',{
-            opacity:1,
-          },0);
-          
-           // 🌧  2. rainy TIMELINE
-         
-          const rainyTl = gsap.timeline({
-            scrollTrigger: {
-              trigger: allFeatures[3],
-              start: "top-=60 60%",        
-              end: "center 40%",        
-              scrub: 2,
-              invalidateOnRefresh: true,
-             markers:true
-            }
-          });
-          //  rainyTl.to('#rain-lottie-container',{
-          // opacity:1,
-          //   duration:.5
-          // },0);
-           rainyTl.to(".cloud-icon-item", {
-            motionPath: {
-              path: "#weatherPath",
-              align: "#weatherPath",
-              alignOrigin: [0.5, 0.5],
-              start: 0.75,
-              end: .95
-            },
-            duration: 1, 
-            ease: "power2.out"
-          }, 0);
-         
-          rainyTl.to('.rain-path',{
-            opacity:1,
-            duration: 0.05
-          },0);
-          rainyTl.to('.rain-path',{
-            yPercent:0,
-          },0);
-          
+// --- B. MAIN MASTER WEATHER TIMELINE (PAUSED) ---
+const mainWeatherTl = gsap.timeline({ paused: true });
+
+mainWeatherTl
+  // ☀️ 1. SUN PHASE
+  .addLabel("sunStart")
+  .to(".sun-icon-item", { opacity: 1, duration: 0.05 })
+  .to(".sun-icon-item", {
+    motionPath: {
+      path: "#weatherPath",
+      align: "#weatherPath",
+      alignOrigin: [0.5, 0.5],
+      start: 0,
+      end: 0.2
+    },
+    duration: 1,
+    ease: "none"
+  }, "<")
+  .addLabel("sunEnd")
+
+  // ☁️ 🌞 2. CLOUDY SUN PHASE
+  .addLabel("cloudySunStart")
+  .to([".cloud-icon-item", ".cloud-path"], { opacity: 1, duration: 0.05 })
+  .to(".cloud-icon-item", {
+    motionPath: {
+      path: "#weatherPath",
+      align: "#weatherPath",
+      alignOrigin: [0.5, 0.5],
+      start: 0.2,
+      end: 0.47
+    },
+    duration: 1,
+    ease: "none"
+  }, "<")
+  .to(".sun-icon-item", {
+    motionPath: {
+      path: "#weatherPath",
+      align: "#weatherPath",
+      alignOrigin: [0.5, 0.5],
+      start: 0.2,
+      end: 0.47
+    },
+    duration: 1,
+    ease: "none"
+  }, "<")
+  .to('.cloud-path', { xPercent: -20, duration: 1 }, "<")
+  .to('.sun-icon-item', { opacity: 0, duration: 0.05 }) // reset
+  .to('.cloud-path', { xPercent: 0, duration: 0.05 })   // reset
+  .addLabel("cloudySunEnd")
+
+  // ☁️ 3. CLOUDY PHASE
+  .addLabel("cloudyStart")
+  .to(".cloud-icon-item", {
+    motionPath: {
+      path: "#weatherPath",
+      align: "#weatherPath",
+      alignOrigin: [0.5, 0.5],
+      start: 0.47,
+      end: 0.75
+    },
+    duration: 1,
+    ease: "none"
+  })
+  .to('.cloudy-bg', { opacity: 1, duration: 1 }, "<")
+  .addLabel("cloudyEnd")
+
+  // 🌧 4. RAINY PHASE
+  .addLabel("rainyStart")
+  .to(".cloud-icon-item", {
+    motionPath: {
+      path: "#weatherPath",
+      align: "#weatherPath",
+      alignOrigin: [0.5, 0.5],
+      start: 0.75,
+      end: 0.95
+    },
+    duration: 1,
+    ease: "none"
+  })
+  .to('.rain-path', { opacity: 1, duration: 0.05 }, "<")
+  .to('.rain-path', { yPercent: 0, duration: 1 }, "<")
+  .to(".cloud-icon-item",{
+    opacity:0
+  })
+  .addLabel("rainyEnd");
+
+
+// --- C. SEPARATE SCROLLTRIGGERS (Binding labels to scroll distance) ---
+
+// Helper function to sync a section to timeline labels
+function bindScrollToLabels(triggerElem, startLabel, endLabel, config = {}) {
+  const startTime = mainWeatherTl.labels[startLabel];
+  const endTime = mainWeatherTl.labels[endLabel];
+
+  return gsap.fromTo(mainWeatherTl, 
+    { time: startTime },
+    {
+      time: endTime,
+      ease: "none",
+      scrollTrigger: {
+        trigger: triggerElem,
+        start: config.start || "top center",
+        end: config.end || "center top",
+        scrub: config.scrub ?? 2,
+        invalidateOnRefresh: true,
+        markers: config.markers || false
+      }
+    }
+  );
+}
+
+// 1. Sun ScrollTrigger
+bindScrollToLabels(allFeatures[0], "sunStart", "sunEnd");
+
+// 2. Cloudy Sun ScrollTrigger
+bindScrollToLabels(allFeatures[1], "cloudySunStart", "cloudySunEnd");
+
+// 3. Cloudy ScrollTrigger
+bindScrollToLabels(allFeatures[2], "cloudyStart", "cloudyEnd");
+
+// 4. Rainy ScrollTrigger
+bindScrollToLabels(allFeatures[3], "rainyStart", "rainyEnd", {
+  start: "top-=60 60%",
+  end: "center 40%",
+  markers: true
+});
           // rainyTl.to('#rain-lottie-container',{
           //   opacity:0,
           //   duration: .5
