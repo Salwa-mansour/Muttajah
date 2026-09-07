@@ -28,8 +28,23 @@ function Home() {
           scrub: 1,
        //   markers: true,
         },
-      })
+      });
+    gsap.from('.hero-content > *', {
+        y: 40,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.2,
+        ease: 'power3.out',
+        delay: 0.2,
+      });
+      // 3. ScrollTrigger: Background Scale (Video Zoom Illusion)
+     gsap.to('.hero-image-wrapper', {
+      scale: 1.15,               // Slightly smaller scale prevents pixel blurring on large screens
+      duration: 12,              // Slightly longer duration makes slow zooms feel more luxurious
+      ease: 'sine.inOut',        // Gentle acceleration/deceleration avoids harsh abrupt starts/stops
     
+      force3D: true,             // Forces GPU layer creation for smooth 60/120 FPS rendering
+    })
       // 3. Return cleanup for non-GSAP side effects (like body class)
       return () => {
         document.body.classList.remove('js-enabled')
@@ -79,8 +94,8 @@ function Home() {
         </div>
 
         <div className="hero-content">
-          <h1 className="hero-title">Welcome to Our Website</h1>
-          <h3>Discover the world with us and decide your next intended path</h3>
+          <h1 className="hero-title">Advunture</h1>
+          <p>Discover the world with us and decide your next intended path</p>
           <button className="hero-button">Start Discovering</button>
         </div>
       </section>

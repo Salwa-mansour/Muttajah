@@ -1,4 +1,5 @@
 
+
 /* Hero Section Container */
 .hero {
     position: relative;
@@ -18,6 +19,10 @@
     width: 100%;
     height: 100%;
     z-index: 1;
+     /* Hints to the browser to isolate rendering to the GPU */
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 /* Dark Overlay via Pseudo-element */
@@ -40,6 +45,10 @@
     object-fit: cover;
     object-position: center;
     /* animation: zoomEffect 20s infinite alternate linear; */
+    /* Prevents image shimmering/flickering during scaling in Chrome/Safari */
+  image-rendering: -webkit-optimize-contrast;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 /* Zoom Keyframe Animation */
@@ -56,33 +65,33 @@
 .hero .hero-content {
     position: absolute;
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 3; /* Places content above overlay */
+    padding: 1rem;
     text-align: center;
-    color: #ffffff;
-    /* font-family: sans-serif; */
+    z-index: 3;
 }
 
 .hero-title {
     font-size: 3rem;
+    font-weight: 600;
     margin-bottom: 10px;
+    font-family: 'Bodoni Moda SC', sans-serif;
 }
 
 .hero-button {
-    margin-top: 20px;
+   
+    margin-top: 30px;
     padding: 12px 30px;
     font-size: 1rem;
     border: none;
     border-radius: 5px;
-    background-color: #007bff;
-    color: white;
+    background-color: hsl(36, 100%, 64%);
+    
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .hero-button:hover {
-    background-color: #0056b3;
+    background-color: hsl(36, 100%, 66%);
 }
 /* =================== */
 
@@ -99,18 +108,18 @@
 /* --- Sun Icon & Radial Shine Layer --- */
 .sun-glow-wrapper {
     position: absolute;
-    top: 35%;
-    left: 65%;
+      top: 33%;
+    left: 63%;
     width: 140px;
     height: 140px;
     transform: translate(-50%, -50%);
     z-index: 2;
     will-change: transform; /* Enhances smooth rendering with GSAP */
-    outline: 1px solid red; /* For debugging */
+   
 }
 
 .sun-shine {
-    outline: 1px solid blue; /* For debugging */
+   
     position: absolute;
     top: 50%;
     left: 50%;
@@ -142,3 +151,13 @@
 
 
 /* ========================= */
+@media (min-width: 767px) {
+    .sun-glow-wrapper {
+    top: 30%;
+    left: 60%;
+   }
+  .hero .hero-content {
+    left: 10%;
+    text-align: initial;
+   }
+}

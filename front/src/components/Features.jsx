@@ -15,12 +15,29 @@ gsap.registerPlugin(ScrollTrigger, MotionPathPlugin, useGSAP)
 
 function Features() {
      const containerRef = useRef()
-   
+     const headingRef = useRef(null);
+
+        useGSAP(() => {
+
+          gsap.from(headingRef.current.children, {
+            y: 40,
+            opacity: 0,
+            duration: 1,
+            stagger: 0.2,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: headingRef.current,
+              start: 'top 85%',
+            }
+          });
+        });
         useGSAP(
             () => {
             // Create a GSAP MatchMedia instance
             const mm = gsap.matchMedia();
-
+            gsap.set(".rain-path", { yPercent: -30, opacity: 0 });
+            gsap.set(".snow-path", { yPercent: -30, opacity: 0 });
+            gsap.set(".cloud-path", { xPercent: -30,opacity: 0 });
             // Add conditions for Mobile and Desktop
             mm.add(
                 {
@@ -41,8 +58,7 @@ function Features() {
             },
             { scope: containerRef } // Scopes selector queries automatically
         );
-
-
+     
     // Define mobile animations inside or access scoped queries via gsap.utils.toArray
   const mobileAnimations = () => {
     // Select all feature cards scoped within containerRef
@@ -65,9 +81,7 @@ function Features() {
       });
     });
     // =======================
-    gsap.set(".rain-path", { yPercent: -30, opacity: 0 });
-    gsap.set(".snow-path", { yPercent: -30, opacity: 0 });
-    gsap.set(".cloud-path", { xPercent: -30,opacity: 0 });
+   
 
   const sunTl = gsap.timeline({
     scrollTrigger: {
@@ -75,7 +89,7 @@ function Features() {
      start: 'top bottom',        // Starts when top of section hits top of viewport
      end: 'top-=100 70%',    // Extends scroll distance across the whole section height
      scrub: 2,
-    //   markers:true
+    //  markers:true
     },
   })
 
@@ -101,7 +115,7 @@ function Features() {
      start: 'top bottom',        // Starts when top of section hits top of viewport
      end: 'top-=100 50%',    // Extends scroll distance across the whole section height
      scrub: 2,
-      markers:true
+      // markers:true
     },
   })
 
@@ -135,18 +149,18 @@ function Features() {
       ease: 'none',
     },
     0 // Starts at timeline position 0
-  )
+  );
   cloudSunTl.to('.cloud-path',{
     opacity:1,
     duration: 0.05
-  },0)
+  },0);
   cloudSunTl.to('.cloud-path',{
     xPercent: 0
-  },0)
+  },0);
    cloudSunTl.to('.sun-icon-item',{
     opacity:0,
     duration: 0.05
-  })
+  });
 //   ===============
  const cloudTl = gsap.timeline({
     scrollTrigger: {
@@ -154,7 +168,7 @@ function Features() {
      start: 'top bottom',        // Starts when top of section hits top of viewport
      end: 'top-=100 50%',    // Extends scroll distance across the whole section height
      scrub: 2,
-      markers:true
+      // markers:true
     },
   })
     cloudTl.to(
@@ -219,7 +233,7 @@ function Features() {
      start: 'top bottom',        // Starts when top of section hits top of viewport
      end: 'top-=100 50%',    // Extends scroll distance across the whole section height
      scrub: 2,
-      markers:true
+      // markers:true
     },
   })
     snowyTl.to(
@@ -255,7 +269,7 @@ function Features() {
 //      start: 'top 50%',        // Starts when top of section hits top of viewport
 //      end: 'bottom bottom',    // Extends scroll distance across the whole section height
 //      scrub: 1,
-//       markers:true
+   //   markers:true
 //     },
 //   })
 
@@ -293,8 +307,184 @@ function Features() {
 
   };
     const desktopAnimations = ()=>{
-        console.log('desktop animations')
-    }
+      const allFeatures = gsap.utils.toArray(".features .feature");
+      console.log(allFeatures)
+      // --- Inset Layout Logic ---
+      gsap.set(allFeatures[0], { top: "12%", right: "15%", left: "auto" });
+      gsap.set(allFeatures[1], { top: "30%", left: "10%", right: "auto" });
+      gsap.set(allFeatures[2], { top: "50%", right: "10%", left: "auto" });
+      gsap.set(allFeatures[3], { top: "70%", left: "10%", right: "auto" });
+      gsap.set(allFeatures[4], { top: "87%", right: "10%", left: "auto" });
+
+      // --- Directional ScrollTrigger Loop ---
+      allFeatures.forEach((feature, index) => {
+        const directionX = (index % 2 === 0) ? 200 : -200;
+        gsap.from(feature, {
+          scrollTrigger: {
+            trigger: feature,
+            start: "top 85%",
+          },
+          opacity: 0.5,
+          scale: 0.5,
+          rotate: 15,
+          x: directionX,
+          y: 100,
+          duration: 1,
+          ease: "elastic.out(1, 0.75)"
+        });
+      });
+
+        // --- A. INITIAL COMPONENT POSITIONING ---
+          gsap.set(".sun-icon-item", {
+            opacity: 0.2,
+            motionPath: {
+              path: "#weatherPath",
+              align: "#weatherPath",
+              alignOrigin: [0.5, 0.5],
+              start: 0,
+              end: 0
+            }
+          });
+
+          gsap.set(".cloud-icon-item", {
+             opacity: 0.2,
+            motionPath: {
+              path: "#weatherPath",
+              align: "#weatherPath",
+              alignOrigin: [0.5, 0.5],
+              start: 0.2,
+              end: 0.2
+            }
+          });
+          // ☀️ 1. SUN TIMELINE
+          const sunTl = gsap.timeline({
+            scrollTrigger: {
+              trigger: allFeatures[0],
+              start: "top center",        
+              end: "center top",
+              scrub: 2,
+              invalidateOnRefresh: true
+            }
+          });
+
+          sunTl.to(".sun-icon-item", { opacity: 1, duration: 0.05 }, 0);
+          sunTl.to(".sun-icon-item", {
+            motionPath: {
+              path: "#weatherPath",
+              align: "#weatherPath",
+              alignOrigin: [0.5, 0.5],
+              start: 0,
+              end: 0.2
+            },
+            duration: 1, 
+            ease: "power2.out"
+          }, 0);
+          // ☁️ 🌞 2. CLOUDY SUN TIMELINE
+          const cloudySunTl = gsap.timeline({
+            scrollTrigger: {
+              trigger: allFeatures[1],
+              start: "top center",        
+              end: "center top",        
+              scrub: 2,
+              invalidateOnRefresh: true,
+            
+            }
+          });
+           cloudySunTl.to([".cloud-icon-item",".cloud-path"], { opacity: 1, duration: 0.05 }, 0);
+           cloudySunTl.to(".cloud-icon-item", {
+            motionPath: {
+              path: "#weatherPath",
+              align: "#weatherPath",
+              alignOrigin: [0.5, 0.5],
+              start: 0.2,
+              end: 0.47
+            },
+            duration: 1, 
+            ease: "power2.out"
+          }, 0);
+           cloudySunTl.to(".sun-icon-item", {
+            motionPath: {
+              path: "#weatherPath",
+              align: "#weatherPath",
+              alignOrigin: [0.5, 0.5],
+              start: 0.2,
+              end: 0.47
+            },
+            duration: 1, 
+            ease: "power2.out"
+          }, 0);
+            cloudySunTl.to('.cloud-path',{
+            xPercent:-20
+          },0);
+             cloudySunTl.to('.sun-icon-item',{
+              opacity:0,
+              duration: 0.05
+            });//reset
+             cloudySunTl.to('.cloud-path',{
+            xPercent:0,
+             duration: 0.05
+            });//reset
+                 // ☁️  2. CLOUDY TIMELINE
+          const cloudyTl = gsap.timeline({
+            scrollTrigger: {
+              trigger: allFeatures[2],
+              start: "top center",        
+              end: "center top",        
+              scrub: 2,
+              invalidateOnRefresh: true,
+          
+            }
+          });
+            cloudyTl.to(".cloud-icon-item", {
+            motionPath: {
+              path: "#weatherPath",
+              align: "#weatherPath",
+              alignOrigin: [0.5, 0.5],
+              start: 0.47,
+              end: 0.75
+            },
+            duration: 1, 
+            ease: "power2.out"
+          }, 0);
+           cloudyTl.to('.cloudy-bg',{
+            opacity:1,
+          },0);
+           // 🌧  2. rainy TIMELINE
+          const rainyTl = gsap.timeline({
+            scrollTrigger: {
+              trigger: allFeatures[3],
+              start: "top-=60 center",        
+              end: "center 40%",        
+              scrub: 2,
+              invalidateOnRefresh: true,
+             markers:true
+            }
+          });
+           rainyTl.to(".cloud-icon-item", {
+            motionPath: {
+              path: "#weatherPath",
+              align: "#weatherPath",
+              alignOrigin: [0.5, 0.5],
+              start: 0.75,
+              end: .95
+            },
+            duration: 1, 
+            ease: "power2.out"
+          }, 0);
+         
+          rainyTl.to('.rain-path',{
+            opacity:1,
+            duration: 0.05
+          },0);
+          rainyTl.to('.rain-path',{
+            yPercent:0,
+          },0);
+        
+          // cleanup
+
+      
+        
+ }
 
 
 
@@ -302,7 +492,7 @@ function Features() {
   return (
     <>
     <section className="features" ref={containerRef} >
-    <div className="section-headeing">
+    <div className="section-heading" ref={headingRef} >
         <h1>featers</h1>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum, quae.</p>
     </div>
