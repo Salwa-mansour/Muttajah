@@ -1,6 +1,8 @@
 
 import { useRef } from 'react'
 import   gsap from 'gsap'
+import { DotLottiePlayer } from '@dotlottie/react-player';
+import '@dotlottie/react-player/dist/index.css';
 import { useGSAP } from '@gsap/react'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { MotionPathPlugin } from 'gsap/MotionPathPlugin'                   
@@ -9,6 +11,8 @@ import featrue_3_img from '../assets/soma-laszlo-rt4SRyA29TE-unsplash.jpg'
 import featrue_2_img from '../assets/david-becker-6BPmpe2o1aw-unsplash.jpg'
 import featrue_4_img from '../assets/stanislav-margolin-CRmUtjJE3nM-unsplash.jpg'
 import featrue_5_img from '../assets/compagnons-z2_GyXqzOcE-unsplash.jpg'
+import rainLottieData from '../assets/Lottie/Rain.json';
+import snowLottieData from '../assets/Lottie/snow fall.json';
 import '../css/features.css'
 
 gsap.registerPlugin(ScrollTrigger, MotionPathPlugin, useGSAP)
@@ -16,6 +20,8 @@ gsap.registerPlugin(ScrollTrigger, MotionPathPlugin, useGSAP)
 function Features() {
      const containerRef = useRef()
      const headingRef = useRef(null);
+     const rainLottieRef = useRef(null);
+     const snowLottieRef = useRef(null);
 
         useGSAP(() => {
 
@@ -262,48 +268,7 @@ function Features() {
     opacity:0,
     duration: 0.05
   })
-    // 2. Motion Path Scroll Timeline (Sun & Cloud follow the path on scroll)
-//   const pathTl = gsap.timeline({
-//     scrollTrigger: {
-//       trigger: containerRef.current, // Pin or track progress across the entire section
-//      start: 'top 50%',        // Starts when top of section hits top of viewport
-//      end: 'bottom bottom',    // Extends scroll distance across the whole section height
-//      scrub: 1,
-   //   markers:true
-//     },
-//   })
 
-//   // Move the Sun from start to end along the curve path
-//   pathTl.to(
-//     '.sun-icon-item',
-//     {
-//       motionPath: {
-//         path: '#linerPath',
-//         align: '#linerPath',
-//         alignOrigin: [0.5, 0.5], // Center icon on path
-//         autoRotate: false,
-//       },
-//       ease: 'none',
-//     },
-//     0 // Starts at timeline position 0
-//   )
-
-//   // Move the Cloud slightly offset along the path
-//   pathTl.to(
-//     '.cloud-icon-item',
-//     {
-//       motionPath: {
-//         path: '#linerPath',
-//         align: '#linerPath',
-//         alignOrigin: [0.5, 0.5],
-//         start: 0.1, // Offset start position on path (10% ahead)
-//         end: 1,
-//         autoRotate: false,
-//       },
-//       ease: 'none',
-//     },
-//     0 // Runs concurrently with the sun animation
-//   )
 
   };
     const desktopAnimations = ()=>{
@@ -324,7 +289,7 @@ function Features() {
             trigger: feature,
             start: "top 85%",
           },
-          opacity: 0.5,
+          opacity: 0,
           scale: 0.5,
           rotate: 15,
           x: directionX,
@@ -336,7 +301,7 @@ function Features() {
 
         // --- A. INITIAL COMPONENT POSITIONING ---
           gsap.set(".sun-icon-item", {
-            opacity: 0.2,
+            opacity: 0,
             motionPath: {
               path: "#weatherPath",
               align: "#weatherPath",
@@ -347,7 +312,7 @@ function Features() {
           });
 
           gsap.set(".cloud-icon-item", {
-             opacity: 0.2,
+             opacity: 0,
             motionPath: {
               path: "#weatherPath",
               align: "#weatherPath",
@@ -449,17 +414,23 @@ function Features() {
            cloudyTl.to('.cloudy-bg',{
             opacity:1,
           },0);
+          
            // 🌧  2. rainy TIMELINE
+         
           const rainyTl = gsap.timeline({
             scrollTrigger: {
               trigger: allFeatures[3],
-              start: "top-=60 center",        
+              start: "top-=60 60%",        
               end: "center 40%",        
               scrub: 2,
               invalidateOnRefresh: true,
              markers:true
             }
           });
+          //  rainyTl.to('#rain-lottie-container',{
+          // opacity:1,
+          //   duration:.5
+          // },0);
            rainyTl.to(".cloud-icon-item", {
             motionPath: {
               path: "#weatherPath",
@@ -479,10 +450,36 @@ function Features() {
           rainyTl.to('.rain-path',{
             yPercent:0,
           },0);
-        
-          // cleanup
+          
+          // rainyTl.to('#rain-lottie-container',{
+          //   opacity:0,
+          //   duration: .5
+          // },0);
+          //  rainyTl.to('#snow-lottie-container',{
+          //   opacity:1,
+         
+          // });
+         
+          // rainyTl.to('#snow-lottie-container',{
+          //   opacity:0,
+         
+          // });
+      // rainyTl.to('.cloudy-bg', { opacity: 1 }, 0);
+      // rainyTl.to('#rain-lottie-container', { opacity: 1, duration: 0.3 }, 0);
 
-      
+      // // ❄️ 3. Snowy Timeline with Lottie Trigger
+      // const snowyTl = gsap.timeline({
+      //   scrollTrigger: {
+      //     trigger: featureCards[4], // snowy feature card
+      //     start: 'top center',
+      //     end: 'bottom center',
+      //     scrub: 2,
+      //     onEnter: () => snowLottieRef.current?.play(),
+      //     onEnterBack: () => snowLottieRef.current?.play(),
+      //     onLeave: () => snowLottieRef.current?.pause(),
+      //     onLeaveBack: () => snowLottieRef.current?.pause(),
+      //   },
+      // });
         
  }
 
@@ -640,9 +637,28 @@ function Features() {
 
     </div>
     <div className="motion-background">
-        <div id="rain-lottie-container" className="lottie-bg"></div>
-      <div id="snow-lottie-container" className="lottie-bg"></div>
-    </div>
+        {/* Rain Lottie */}
+        <div id="rain-lottie-container" className="lottie-bg">
+          <DotLottiePlayer
+            ref={rainLottieRef}
+            src={rainLottieData}
+            loop
+            autoplay={false} // Managed by ScrollTrigger callbacks
+            style={{ width: '100%', height: '100%' }}
+          />
+        </div>
+
+        {/* Snow Lottie */}
+        <div id="snow-lottie-container" className="lottie-bg">
+          <DotLottiePlayer
+            ref={snowLottieRef}
+            src={snowLottieData}
+            loop
+            autoplay={false} // Managed by ScrollTrigger callbacks
+            style={{ width: '100%', height: '100%' }}
+          />
+        </div>
+      </div>
 </section>
     </>
   )

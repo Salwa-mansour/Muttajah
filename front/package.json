@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@dotlottie/react-player": "^1.6.19",
     "@gsap/react": "^2.1.2",
     "@portabletext/react": "^8.0.1",
     "@sanity/client": "^8.2.0",
