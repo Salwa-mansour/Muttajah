@@ -164,8 +164,8 @@ const mobileAnimations = () => {
     }, '<')
     .to('.cloud-icon-item', { opacity: 1, duration: 0.1 }, '<')
     .to('.cloud-path', { opacity: 1, duration: 0.1 }, '<')
-    .to('.cloud-path', { xPercent: 0, duration: 0.1 }, '<')
-    .to('.sun-icon-item', { opacity: 0, duration: 0.1 }, '>-0.2')
+    .to('.cloud-path', { xPercent: 0, duration:1.5 }, '<')
+    .to('.sun-icon-item', { opacity: 0, duration: 0.1 })
 
     // Phase 3: Cloud moves through middle section (0.45 -> 0.65)
     .to('.cloud-icon-item', {
