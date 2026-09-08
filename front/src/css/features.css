@@ -16,6 +16,7 @@
     top: 50%;
     transform: translateY(-50%);
     z-index: 15;
+    overflow: hidden;
 }
 .curve-path{
     display: none;
@@ -126,7 +127,8 @@
 /* ☁️ Cloudy: Soft Gray/Blue Gradient */
 .cloudy-bg {
   background: linear-gradient(180deg, rgb(28 77 94 / 68%) 0%, rgb(9 43 57 / 79%) 100%);
-     opacity: 0;/*  Control transition via GSAP */
+    /* opacity: 0;  Control transition via GSAP */
+    will-change: opacity;
 }
 
 
@@ -165,8 +167,8 @@
         width: 350px;
     }
     .path-container {
-     width: 200px; 
-     height: 200px; 
+     width: 13vw; 
+     height: 13vw; 
     }
    
 

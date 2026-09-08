@@ -41,6 +41,7 @@ function Features() {
             () => {
             // Create a GSAP MatchMedia instance
             const mm = gsap.matchMedia();
+            gsap.set(".cloudy-bg", { opacity: 0 });
             gsap.set(".rain-path", { yPercent: -30, opacity: 0 });
             gsap.set(".snow-path", { yPercent: -30, opacity: 0 });
             gsap.set(".cloud-path", { xPercent: -30,opacity: 0 });
@@ -217,9 +218,9 @@ function Features() {
     },
     0 // Starts at timeline position 0
   )
-   rainyTl.to('.cloudy-bg',{
-    opacity:1,
-  },0)
+  //  rainyTl.to('.cloudy-bg',{
+  //   opacity:1,
+  // },0)
    rainyTl.to('.rain-path',{
     opacity:1,
     duration: 0.05
@@ -337,7 +338,7 @@ mainWeatherTl
       start: 0,
       end: 0.2
     },
-    duration: 1,
+    // duration: 1,
     ease: "none"
   }, "<")
   .addLabel("sunEnd")
@@ -353,7 +354,7 @@ mainWeatherTl
       start: 0.2,
       end: 0.47
     },
-    duration: 1,
+    // duration: 1,
     ease: "none"
   }, "<")
   .to(".sun-icon-item", {
@@ -364,7 +365,7 @@ mainWeatherTl
       start: 0.2,
       end: 0.47
     },
-    duration: 1,
+    // duration: 1,
     ease: "none"
   }, "<")
   .to('.cloud-path', { xPercent: -20, duration: 1 }, "<")
@@ -382,10 +383,10 @@ mainWeatherTl
       start: 0.47,
       end: 0.75
     },
-    duration: 1,
+    // duration: 1,
     ease: "none"
   })
-  .to('.cloudy-bg', { opacity: 1, duration: 1 }, "<")
+  // .to('.cloudy-bg', { opacity: 1})
   .addLabel("cloudyEnd")
 
   // 🌧 4. RAINY PHASE
@@ -398,7 +399,7 @@ mainWeatherTl
       start: 0.75,
       end: 0.95
     },
-    duration: 1,
+    // duration: 1,
     ease: "none"
   })
   .to('.rain-path', { opacity: 1, duration: 0.05 }, "<")
@@ -442,11 +443,20 @@ bindScrollToLabels(allFeatures[1], "cloudySunStart", "cloudySunEnd");
 // 3. Cloudy ScrollTrigger
 bindScrollToLabels(allFeatures[2], "cloudyStart", "cloudyEnd");
 
+const bgFade = gsap.to('.cloudy-bg',{
+  opacity:1,
+  scrollTrigger:{
+    trigger:allFeatures[2],
+    start:'top center',
+    scrub:2,
+    markers:true
+  }
+})
+
 // 4. Rainy ScrollTrigger
 bindScrollToLabels(allFeatures[3], "rainyStart", "rainyEnd", {
   start: "top-=60 60%",
   end: "center 40%",
-  markers: true
 });
           // rainyTl.to('#rain-lottie-container',{
           //   opacity:0,
