@@ -1,5 +1,5 @@
 import logo from '../assets/logoipsum-380.png'
-import { Link } from 'react-router-dom'
+import { Link,useLocation } from 'react-router-dom'
 
 
 const style ={
@@ -10,8 +10,12 @@ const style ={
   }
 }
 function Nav() {
+  const location = useLocation();
+
+  // Check the current path
+  const isHome = location.pathname === '/';
   return (
-     <nav className='nav' >
+     <nav className={`nav ${isHome ? "home-nav":""}`}  >
         <Link  to="/" className="logo" >
           <img src={logo} alt="logo"  />
         </Link>

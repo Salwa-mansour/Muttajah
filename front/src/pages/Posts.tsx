@@ -40,17 +40,45 @@ export default function Posts() {
   if (loading) return <p>Loading travel stories...</p>
 
   return (
-    <div>
+   <> 
+  <section className='posts-container container'>
+  {posts.map((post) => (
+        <article   key={post._id} className='item-card' >
+            <figure className='post-img'>
+              {post.mainImage && post.mainImage.asset && (
+                <img
+                  // Use urlFor to generate the source, define a width, and auto-format to WebP
+                  src={urlFor(post.mainImage).width(1200).height(600).url()}
+                  alt={post.title}
+                
+                />
+              )}
+            </figure>
+               <div className='card-info'>
+                  {post.locationDetails && (
+                        <h6 className='location' >
+                          📍 {post.locationDetails.cityName}, {post.locationDetails.countryName}
+                        </h6>
+                      )}
+                  <h3 className='post-title'>
+                      {post.title}
+                  </h3>
+                  <p className='post-desc'>
+                      post descrtion
+                  </p>
+                  <Link   to={`/post/${post._id}`} title='read more' className='card-link' ></Link>
+            </div>{/*card-info */}
+            
+        </article>
+        ))}
+</section>
+     {/* <div>
       <h1>Travel Stories</h1>
-      <div style={{ display: 'grid', gap: '1.5rem', marginTop: '1.5rem' }}>
+      <div >
         {posts.map((post) => (
           <article
             key={post._id}
-            style={{
-              padding: '1.25rem',
-              border: '1px solid #e2e8f0',
-              borderRadius: '8px',
-            }}
+           
           >
             <h2>{post.title}</h2>
 
@@ -59,38 +87,24 @@ export default function Posts() {
           // Use urlFor to generate the source, define a width, and auto-format to WebP
           src={urlFor(post.mainImage).width(1200).height(600).url()}
           alt={post.title}
-          style={{
-            width: '100%',
-            height: 'auto',
-            maxHeight: '400px',
-            objectFit: 'cover',
-            borderRadius: '12px',
-            marginTop: '1.5rem',
-            boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
-          }}
+        
         />
       )}
 
             {post.locationDetails && (
-              <p style={{ color: '#64748b', fontSize: '0.9rem' }}>
+              <p >
                 📍 {post.locationDetails.cityName}, {post.locationDetails.countryName}
               </p>
             )}
             <Link
               to={`/post/${post._id}`}
-              style={{
-                display: 'inline-block',
-                marginTop: '0.5rem',
-                color: '#2563eb',
-                fontWeight: 'bold',
-                textDecoration: 'none',
-              }}
+             
             >
               Read Story →
             </Link>
           </article>
         ))}
       </div>
-    </div>
-  )
-}
+    </div> */}
+      </>
+  )}

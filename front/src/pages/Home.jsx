@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import '../css/home.css'
 import heroImage from '../assets/johannes-plenio-bhCdwWNmXw8-unsplash.jpg'
 import Features from '../components/Features'
+import { Link } from 'react-router-dom'
 
 // Register plugins outside the component
 gsap.registerPlugin(ScrollTrigger, useGSAP)
@@ -96,7 +97,8 @@ function Home() {
         <div className="hero-content">
           <h1 className="hero-title">Advunture</h1>
           <p>Discover the world with us and decide your next intended path</p>
-          <button className="hero-button">Start Discovering</button>
+          {/* <button className="hero-button">Start Discovering</button> */}
+          <Link className="hero-button" to="/posts">Start Discovering</Link>
         </div>
       </section>
     </div>
