@@ -67,211 +67,167 @@ function Features() {
         );
      
     // Define mobile animations inside or access scoped queries via gsap.utils.toArray
-  const mobileAnimations = () => {
-    // Select all feature cards scoped within containerRef
-  const featureCards = gsap.utils.toArray('.feature', containerRef.current)
+const mobileAnimations = () => {
+  const allFeatures = gsap.utils.toArray('.feature', containerRef.current);
 
-    featureCards.forEach((card) => {
-      gsap.from(card, {
-        y: 60,               // Slide up from 60px below
-        opacity: 0.5,
-        scale: 0.5,
-        rotate: 15,
-        duration: 0.7,
-        ease: 'elastic.out(1, 0.75)',
-        scrollTrigger: {
-          trigger: card,     // Individual trigger for each card
-          start: 'top 95%',  // Starts animation when card top reaches 85% of viewport
-          toggleActions: 'play none none reverse', // Plays on enter, reverses on scrolling back up
-          
-        },
-      });
+  // 1. Entrance animations for individual cards on mobile
+  allFeatures.forEach((card) => {
+    gsap.from(card, {
+      y: 60,
+      opacity: 0.5,
+      scale: 0.5,
+      rotate: 15,
+      duration: 0.7,
+      ease: 'elastic.out(1, 0.75)',
+      scrollTrigger: {
+        trigger: card,
+        start: 'top 95%',
+        toggleActions: 'play none none reverse',
+        invalidateOnRefresh: true,
+      },
     });
-    // =======================
-   
-
-  const sunTl = gsap.timeline({
-    scrollTrigger: {
-      trigger:featureCards[0] , // Pin or track progress across the entire section
-     start: 'top bottom',        // Starts when top of section hits top of viewport
-     end: 'top-=100 70%',    // Extends scroll distance across the whole section height
-     scrub: 2,
-    //  markers:true
-    },
-  })
-
-  // Move the Sun from start to end along the curve path
-    sunTl.to(
-    '.sun-icon-item',
-    {
-      motionPath: {
-        path: '#linerPath',
-        align: '#linerPath',
-        alignOrigin: [0.5, 0.5], // Center icon on path
-        start:0,
-        end:.2,
-        autoRotate: false,
-      },
-      ease: 'none',
-    },
-    0 // Starts at timeline position 0
-  )
-  const cloudSunTl = gsap.timeline({
-    scrollTrigger: {
-      trigger:featureCards[1] , // Pin or track progress across the entire section
-     start: 'top bottom',        // Starts when top of section hits top of viewport
-     end: 'top-=100 50%',    // Extends scroll distance across the whole section height
-     scrub: 2,
-      // markers:true
-    },
-  })
-
-  // Move the Sun from start to end along the curve path
-    cloudSunTl.to(
-    '.cloud-icon-item',
-    {
-      motionPath: {
-        path: '#linerPath',
-        align: '#linerPath',
-        alignOrigin: [0.5, 0.5], // Center icon on path
-        start:.2,
-        end:.45,
-        autoRotate: false,
-      },
-      ease: 'none',
-    },
-    0 // Starts at timeline position 0
-  )
-    cloudSunTl.to(
-    '.sun-icon-item',
-    {
-      motionPath: {
-        path: '#linerPath',
-        align: '#linerPath',
-        alignOrigin: [0.5, 0.5], // Center icon on path
-        start:.2,
-        end:.45,
-        autoRotate: false,
-      },
-      ease: 'none',
-    },
-    0 // Starts at timeline position 0
-  );
-  cloudSunTl.to('.cloud-path',{
-    opacity:1,
-    duration: 0.05
-  },0);
-  cloudSunTl.to('.cloud-path',{
-    xPercent: 0
-  },0);
-   cloudSunTl.to('.sun-icon-item',{
-    opacity:0,
-    duration: 0.05
   });
-//   ===============
- const cloudTl = gsap.timeline({
-    scrollTrigger: {
-      trigger:featureCards[2] , // Pin or track progress across the entire section
-     start: 'top bottom',        // Starts when top of section hits top of viewport
-     end: 'top-=100 50%',    // Extends scroll distance across the whole section height
-     scrub: 2,
-      // markers:true
+
+  // 2. Set initial setup positions
+  gsap.set(".sun-icon-item", {
+    opacity: 1,
+    motionPath: {
+      path: "#linerPath",
+      align: "#linerPath",
+      alignOrigin: [0.5, 0.5],
+      start: 0,
+      end: 0,
     },
-  })
-    cloudTl.to(
-    '.cloud-icon-item',
-    {
+  });
+
+  gsap.set(".cloud-icon-item", {
+    opacity: 0,
+    motionPath: {
+      path: "#linerPath",
+      align: "#linerPath",
+      alignOrigin: [0.5, 0.5],
+      start: 0.2,
+      end: 0.2,
+    },
+  });
+
+  // 3. Single Master Timeline attached to the parent section (.features)
+  const masterMobileTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: containerRef.current, // Parent container (.features)
+      start: 'top top+=100',          // Starts when top of section reaches near top of viewport
+      end: 'bottom bottom',          // Ends when bottom of section reaches bottom of viewport
+      scrub: 1,                      // Smooth scrub tracking
+      invalidateOnRefresh: true,
+    },
+  });
+
+  masterMobileTl
+    // Phase 1: Sun moves down first section (0 -> 0.2)
+    .to('.sun-icon-item', {
       motionPath: {
         path: '#linerPath',
         align: '#linerPath',
-        alignOrigin: [0.5, 0.5], // Center icon on path
-        start:.45,
-        end:.65,
+        alignOrigin: [0.5, 0.5],
+        start: 0,
+        end: 0.2,
         autoRotate: false,
       },
       ease: 'none',
-    },
-    0 // Starts at timeline position 0
-  )
-//   ===============
- const rainyTl = gsap.timeline({
-    scrollTrigger: {
-      trigger:featureCards[3] , // Pin or track progress across the entire section
-     start: 'top bottom',        // Starts when top of section hits top of viewport
-     end: 'top-=100 50%',    // Extends scroll distance across the whole section height
-     scrub: 2,
-    
-    },
-  })
-    rainyTl.to(
-    '.cloud-icon-item',
-    {
+      duration: 1,
+    })
+
+    // Phase 2: Cloud appears, Sun transitions to Cloud (0.2 -> 0.45)
+    .to('.cloud-icon-item', {
       motionPath: {
         path: '#linerPath',
         align: '#linerPath',
-        alignOrigin: [0.5, 0.5], // Center icon on path
-        start:.65,
-        end:.87,
+        alignOrigin: [0.5, 0.5],
+        start: 0.2,
+        end: 0.45,
         autoRotate: false,
       },
       ease: 'none',
-    },
-    0 // Starts at timeline position 0
-  )
-  //  rainyTl.to('.cloudy-bg',{
-  //   opacity:1,
-  // },0)
-   rainyTl.to('.rain-path',{
-    opacity:1,
-    duration: 0.05
-  },0)
-   rainyTl.to('.rain-path',{
-    yPercent:0,
-  },0)
-   rainyTl.to('.rain-path',{
-    opacity:0,
-    duration: 0.05
-  })
-    // 2. Motion Path Scroll Timeline (Sun & Cloud follow the path on scroll)
-//   ===============
- const snowyTl = gsap.timeline({
-    scrollTrigger: {
-      trigger:featureCards[4] , // Pin or track progress across the entire section
-     start: 'top bottom',        // Starts when top of section hits top of viewport
-     end: 'top-=100 50%',    // Extends scroll distance across the whole section height
-     scrub: 2,
-      // markers:true
-    },
-  })
-    snowyTl.to(
-    '.cloud-icon-item',
-    {
+      duration: 1,
+    })
+    .to('.sun-icon-item', {
       motionPath: {
         path: '#linerPath',
         align: '#linerPath',
-        alignOrigin: [0.5, 0.5], // Center icon on path
-        start:.87,
-        end:1,
+        alignOrigin: [0.5, 0.5],
+        start: 0.2,
+        end: 0.45,
         autoRotate: false,
       },
       ease: 'none',
-    },
-    0 // Starts at timeline position 0
-  )
-   snowyTl.to('.snow-path',{
-    opacity:1,
-    duration: 0.05
-  },0)
-   snowyTl.to('.snow-path',{
-    yPercent:0,
-  },0)
-   snowyTl.to('.snow-path',{
-    opacity:0,
-    duration: 0.05
-  })
+      duration: 1,
+    }, '<')
+    .to('.cloud-icon-item', { opacity: 1, duration: 0.1 }, '<')
+    .to('.cloud-path', { opacity: 1, duration: 0.1 }, '<')
+    .to('.cloud-path', { xPercent: 0, duration: 0.1 }, '<')
+    .to('.sun-icon-item', { opacity: 0, duration: 0.1 }, '>-0.2')
+
+    // Phase 3: Cloud moves through middle section (0.45 -> 0.65)
+    .to('.cloud-icon-item', {
+      motionPath: {
+        path: '#linerPath',
+        align: '#linerPath',
+        alignOrigin: [0.5, 0.5],
+        start: 0.45,
+        end: 0.65,
+        autoRotate: false,
+      },
+      ease: 'none',
+      duration: 1,
+    })
+
+    // Phase 4: Rain animation triggers (0.65 -> 0.87)
+    .to('.cloud-icon-item', {
+      motionPath: {
+        path: '#linerPath',
+        align: '#linerPath',
+        alignOrigin: [0.5, 0.5],
+        start: 0.65,
+        end: 0.87,
+        autoRotate: false,
+      },
+      ease: 'none',
+      duration: 1,
+    })
+    .to('.rain-path', { opacity: 1, duration: 0.1 }, '<')
+    .to('.rain-path', { yPercent: 0, duration: 0.8 }, '<')
+    .to('.rain-path', { opacity: 0, duration: 0.1 })
+
+    // Phase 5: Snow animation triggers to end of path (0.87 -> 1.0)
+    .to('.cloud-icon-item', {
+      motionPath: {
+        path: '#linerPath',
+        align: '#linerPath',
+        alignOrigin: [0.5, 0.5],
+        start: 0.87,
+        end: 1,
+        autoRotate: false,
+      },
+      ease: 'none',
+      duration: 1,
+    })
+    .to('.snow-path', { opacity: 1, duration: 0.1 }, '<')
+    .to('.snow-path', { yPercent: 0, duration: 0.8 }, '<')
+    .to('.snow-path', { opacity: 0, duration: 0.1 });
 
 
-  };
+    const bgFade = gsap.to('.cloudy-bg',{
+  opacity:1,
+  scrollTrigger:{
+    trigger:allFeatures[2],
+    start:'top center',
+    scrub:2,
+    markers:true
+  }
+})
+
+
+};
     const desktopAnimations = ()=>{
       const allFeatures = gsap.utils.toArray(".features .feature");
       console.log(allFeatures)
@@ -477,7 +433,7 @@ bindScrollToLabels(allFeatures[3], "rainyStart", "rainyEnd", {
       // // ❄️ 3. Snowy Timeline with Lottie Trigger
       // const snowyTl = gsap.timeline({
       //   scrollTrigger: {
-      //     trigger: featureCards[4], // snowy feature card
+      //     trigger: allFeatures[4], // snowy feature card
       //     start: 'top center',
       //     end: 'bottom center',
       //     scrub: 2,
