@@ -1,4 +1,3 @@
-import React from 'react'
 import { UseTripWeatherReturn } from '../hooks/useTripWeather'
 import { WeatherDatePicker, WeatherSummary, DailyCast } from './TripWeatherComponents'
 
@@ -12,7 +11,7 @@ export default function WeatherPop({ isOpen, onClose, weather }: WeatherPopProps
   if (!isOpen) return null
 
   return (
-    <div className="weather-pop-overlay" onClick={onClose}>
+    <div className="weather-pop-overlay" >
       <div className="weather-pop-content" onClick={(e) => e.stopPropagation()}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
           <h3>Trip Weather</h3>

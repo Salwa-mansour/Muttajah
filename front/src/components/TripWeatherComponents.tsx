@@ -117,13 +117,13 @@ export function DailyCast({ weather }: SubComponentProps) {
   if (!weather.weatherData?.daily) return null
 
   return (
-    <div style={{ ...styles.dailyGrid, marginTop: '1rem' }}>
+    <ul className='daily-cast-list' style={{ ...styles.dailyGrid, marginTop: '1rem' }}>
       {weather.weatherData.daily.time.map((dateStr: string, index: number) => {
         const code = weather.weatherData?.daily?.weathercode?.[index] ?? -1
         const weatherDetails = getWeatherDetails(code)
 
         return (
-          <div key={dateStr} style={styles.dailyRow}>
+          <li key={dateStr} style={styles.dailyRow}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ fontSize: '1.25rem' }}>{weatherDetails.icon}</span>
               <div>
@@ -140,10 +140,10 @@ export function DailyCast({ weather }: SubComponentProps) {
                 Low: <strong>{weather.weatherData?.daily?.temperature_2m_min[index]}°C</strong>
               </span>
             </div>
-          </div>
+          </li>
         )
       })}
-    </div>
+    </ul>
   )
 }
 

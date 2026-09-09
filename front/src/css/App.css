@@ -4,9 +4,7 @@
     box-sizing: border-box;
 }
 
-.nav-items {
-    list-style: none;
-}
+
 /* Quicksand - Inconsolata - Cutive Mono -Dosis */
 body{
      font-family: "Quicksand", sans-serif;
@@ -26,7 +24,9 @@ a {
     color: #fff;
     text-decoration: none; 
 }
-
+.nav-items {
+    list-style: none;
+}
 .nav {
     position:absolute ;
     background-color: transparent;
@@ -92,9 +92,7 @@ a {
     font-size: 3rem;
     text-shadow: 1px 1px 0px #a8a8a8;
 }
-*{
-    outline: 1px solid salmon;
-}
+
 .container{
     background-color: #f9f6f0;
     min-height: 100vh;
@@ -164,5 +162,10 @@ a {
     .posts-container .item-card{
    
     width: 300px;
+    }
+}
+@media (max-width:766px){
+    *{
+    outline: 1px solid salmon;
     }
 }
