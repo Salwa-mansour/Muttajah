@@ -35,3 +35,12 @@ figure img{
     margin: auto;
     padding-block:.5rem ;
 }
+.post-header{
+    position: relative;
+}
+.post-header__data{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-image: linear-gradient(360deg, #f9f6f0, transparent);
+}
