@@ -23,7 +23,7 @@ export function WeatherDatePicker({ weather }: SubComponentProps) {
           📅 {isSingleDay ? startDateStr : `${startDateStr} — ${endDateStr}`}
         </button>
 
-        <button
+        {/* <button
           type="button"
           onClick={weather.handleResetToToday}
           style={{
@@ -33,7 +33,7 @@ export function WeatherDatePicker({ weather }: SubComponentProps) {
           }}
         >
           Live Weather
-        </button>
+        </button> */}
       </div>
 
       {weather.isOpen && (
@@ -152,6 +152,7 @@ const styles: Record<string, React.CSSProperties> = {
   pickerContainer: { position: 'relative', display: 'inline-block' },
   controlsGroup: { display: 'flex', gap: '8px', alignItems: 'center' },
   triggerBtn: {
+   
     padding: '10px 16px',
     borderRadius: '8px',
     border: '1px solid #cbd5e1',
@@ -178,7 +179,7 @@ const styles: Record<string, React.CSSProperties> = {
     overflowX: 'auto',
     maxWidth: '90vw',
   },
-  popoverFooter: { padding: '8px', textAlign: 'right', borderTop: '1px solid #f1f5f9' },
+  popoverFooter: { outline:'2px solid green', padding: '8px', textAlign: 'right', borderTop: '1px solid #f1f5f9' },
   doneBtn: { padding: '6px 16px', background: '#2563eb', color: '#ffffff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 500 },
   card: { marginTop: '1rem', padding: '1.25rem', background: '#f8fafc', borderRadius: '10px', border: '1px solid #e2e8f0' },
   cardTitle: { margin: '0 0 1rem 0', color: '#1e293b' },

@@ -55,25 +55,25 @@ export default function PostDetail() {
            </Link>
 
       <article className='single-page-content'>
-          <header className='post-header' role='post header'>
-                {post.mainImage?.asset && (
-                  <figure className='main-img'>
-                      <img
-                        src={urlFor(post.mainImage).width(1200).height(600).url()}
-                        alt={post.title}
-                    
-                      />
-                  </figure>
-                )}
-                   <div className='post-header__data'>
-                    <h1 className='post-title'>{post.title}</h1>
-                      {post.locationDetails && (
-                          <h6 className='location' >
-                            📍 {post.locationDetails.cityName}, {post.locationDetails.countryName}
-                          </h6>
-                        )}
-                    </div>{/*post-header__data */}
-            </header>
+                <header className='post-header' role='post header'>
+                      {post.mainImage?.asset && (
+                        <figure className='main-img'>
+                            <img
+                              src={urlFor(post.mainImage).width(1200).height(600).url()}
+                              alt={post.title}
+                          
+                            />
+                        </figure>
+                      )}
+                        <div className='post-header__data'>
+                          <h1 className='post-title'>{post.title}</h1>
+                            {post.locationDetails && (
+                                <h6 className='location' >
+                                  📍 {post.locationDetails.cityName}, {post.locationDetails.countryName}
+                                </h6>
+                              )}
+                          </div>{/*post-header__data */}
+                  </header>
           <div className='weather-quiery'>
            {/* Mobile Drawer Trigger */}
                   <button className="mobile-only-btn" onClick={() => setIsPopOpen(true)}>

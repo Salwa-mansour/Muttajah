@@ -9,6 +9,7 @@
 }
 .single-page-content{
     width: 100%;
+    display: grid;
 }
 .main-img{
     position: relative;
@@ -30,9 +31,8 @@ figure img{
 .post figure{
     position: relative;
     width: 80%;
-  
-    aspect-ratio: 1/1;
-    margin: auto;
+    margin:1.5rem auto !important;
+    aspect-ratio: 3 / 2;
     padding-block:.5rem ;
 }
 .post-header{
@@ -64,4 +64,75 @@ figure img{
      flex: 1;
    overflow: auto;
    min-height: 0
+}
+/* desktop stylings */
+@media (min-width: 767px) {
+     *{
+    outline: 1px solid salmon;
+    }
+    .weather-pop-overlay,
+    .mobile-only-btn{
+        display: none;
+    }
+    .desktop-daily-cast{
+        display: block;
+    }
+    .posts-container .item-card{
+    width: 300px;
+    }
+    .single-page-content{
+        --side-space: 350px;
+        --post-margin:1rem;
+        grid-template-columns:var(--side-space) 1fr;
+       grid-template-areas: 
+        "contentHeader contentHeader "
+        "sideContent    content    "
+    }
+    .post-header{
+        grid-area: contentHeader;
+    }
+    .post-header__data{
+        padding-left:calc(var(--side-space) + var(--post-margin)) ;
+    }
+    .weather-quiery{
+        grid-area: sideContent;
+    }
+    .post{
+        grid-area: content;
+    }
+    .weather-inline-wrapper{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+   }
+   .desktop-daily-cast{
+    
+        flex: 1;
+        overflow: auto;
+        min-height: 0;
+        /* transform: scaleX(-1); */
+   }
+   .weather-inline-wrapper::after{
+    content: " ";
+    outline: 1px solid green;
+    position: absolute;
+    width: 100%;
+    height: 50%;
+    bottom: 0;
+    left: 0;
+   z-index: 10;
+   pointer-events: none;
+   /* 2. Control gradient color stops */
+  /* #f9f6f0 starts solid at 0% (bottom), remains solid up to 20%, then fades out to transparent at 100% (top) */
+  background-image: linear-gradient(
+    0deg, 
+    #f9f6f0 0%, 
+    rgba(249, 246, 240, 0.8) 35%, 
+    transparent 100%
+  );
+}
+   /* .desktop-daily-cast *{
+         transform: scaleX(-1);
+   } */
 }
