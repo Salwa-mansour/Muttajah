@@ -11,6 +11,7 @@ import { LocationCoords, useTripWeather } from '../hooks/useTripWeather'
 import { WeatherDatePicker, WeatherSummary, DailyCast } from '../components/TripWeatherComponents'
 import WeatherPop from '../components/WeatherPop'
 
+
 interface Location {
   lng: number
   lat: number
@@ -76,15 +77,21 @@ export default function PostDetail() {
                   </header>
           <div className='weather-quiery'>
            {/* Mobile Drawer Trigger */}
-                  <button className="mobile-only-btn" onClick={() => setIsPopOpen(true)}>
-                    🌤️ Open Weather Details
-                  </button>
+                 
 
                   {/* INLINE / DESKTOP VIEW */}
                   <div className="weather-inline-wrapper">
-                    <WeatherDatePicker weather={weather} />
-                    <WeatherSummary weather={weather} />
-                    
+                   
+                    <div className='weather-summary-wrapper'>
+                       <WeatherSummary weather={weather} />
+                        <button className="mobile-only-btn" onClick={() => setIsPopOpen(true)}>
+                        🌤️ Open Weather Details
+                        </button>
+                    </div>
+                    <div className='datePicker-wrapper'>
+                       
+                        <WeatherDatePicker weather={weather} />
+                    </div>
                     {/* Hidden on mobile via CSS rules, visible on desktop */}
                     <div className="desktop-daily-cast">
                       <DailyCast weather={weather} />

@@ -14,7 +14,9 @@ export function WeatherDatePicker({ weather }: SubComponentProps) {
  const startDateStr = format(weather.range[0].startDate, 'MMM dd')
   const endDateStr = format(weather.range[0].endDate, 'MMM dd')
   const isSingleDay = startDateStr === endDateStr
-
+// Check if a valid, distinct range is selected
+  const haseRangeSet = startDateStr &&  startDateStr && !isSingleDay;
+ 
   const handleDateSelect = (ranges: any) => {
     weather.handleSelect(ranges)
     const selection = ranges.selection || Object.values(ranges)[0]
@@ -28,32 +30,51 @@ export function WeatherDatePicker({ weather }: SubComponentProps) {
   }
 
   return (
-    <div style={styles.container}>
+    <div className='weather-box'>
       {/* 1. Label */}
-      <label style={styles.label}>Date</label>
-
+     
       {/* 2. Text field / Input Trigger */}
-      <div 
-        style={styles.textField} 
-        onClick={() => weather.setIsOpen(!weather.isOpen)}
-        role="button"
-        tabIndex={0}
-      >
-        <span style={styles.inputText}>
-          {isSingleDay ? startDateStr : `${startDateStr} - ${endDateStr}`}
-        </span>
-        {/* Calendar Icon */}
-        <svg style={styles.calendarIcon} viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2">
-          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-          <line x1="16" y1="2" x2="16" y2="6"></line>
-          <line x1="8" y1="2" x2="8" y2="6"></line>
-          <line x1="3" y1="10" x2="21" y2="10"></line>
-        </svg>
-      </div>
+          {/* <label className='date-label'  >
+              <span>Search the weather in spisific period</span> 
+          </label> */}
+          <div 
+            className='date-text '
+            id='date-toggler'
+            onClick={() => weather.setIsOpen(!weather.isOpen)}
+            role="button"
+            tabIndex={0}
+          > 
+            
+            <span  className='inputText' >
+              {haseRangeSet ?  `${startDateStr} - ${endDateStr}`
+                :"Search the weather in spisific period"}
+            </span>
+       <div role='icon' className='search-icon'> 
+       <svg viewBox="5 0 100 100" width="230" height="200"  className="icon-path cloud-search-path">
+          <g strokeLinecap="round" strokeLinejoin="round">
+          
+                  <path 
+                    d="M 22,68 A 18,18 0 0,1 22,32 A 24,24 0 0,1 67,20 A 21,21 0 0,1 88,68 Z" 
+                    fill="#BAE6FD" 
+                    stroke="#38BDF8" 
+                    strokeWidth="4"
+                  />
 
+                
+                  <g stroke="#0284C7" strokeWidth="4">
+        
+                  <circle cx="68" cy="64" r="13" fill="#FFFFFF" />
+                
+                  <line x1="77" y1="73" x2="90" y2="86" />
+                </g>
+              </g>
+            </svg>
+      </div>
+          </div>
+   
       {/* 3. Calendar Popover */}
       {weather.isOpen && (
-        <div style={styles.popover}>
+        <div className='date-popover'>
         <DateRange
             ranges={weather.range}
             onChange={handleDateSelect}
@@ -81,16 +102,16 @@ export function WeatherSummary({ weather }: SubComponentProps) {
   const { weatherData } = weather
 
   return (
-    <div style={styles.card}>
-      <h4 style={styles.cardTitle}>Weather Overview</h4>
+    <div className='weather-container'>
+      <h4 >Weather Overview</h4>
       {weatherData.current_weather ? (
-        <div style={styles.currentReading}>
-          <span style={{ fontSize: '2.5rem' }}>
+        <div >
+          <span >
             {getWeatherDetails(weatherData.current_weather.weathercode).icon}
           </span>
           <div>
-            <span style={styles.temp}>{weatherData.current_weather.temperature}°C</span>
-            <p style={{ margin: 0, color: '#475569', fontWeight: 500 }}>
+            <span >{weatherData.current_weather.temperature}°C</span>
+            <p >
               {getWeatherDetails(weatherData.current_weather.weathercode).label}
             </p>
           </div>
@@ -101,19 +122,19 @@ export function WeatherSummary({ weather }: SubComponentProps) {
           if (!summary) return null
 
           return (
-            <div style={styles.currentReading}>
-              <span style={{ fontSize: '2.5rem' }}>{summary.dominantWeather.icon}</span>
+            <div className='daily-weather' >
+              <span >{summary.dominantWeather.icon}</span>
               <div>
-                <div style={{ display: 'flex', gap: '1rem', alignItems: 'baseline' }}>
-                  <span style={styles.temp}>
+                <div >
+                  <span >
                     {summary.avgMaxTemp}°C
-                    <span style={{ fontSize: '1rem', color: '#64748b', fontWeight: 400 }}> (Avg High)</span>
+                    <span > (Avg High)</span>
                   </span>
-                  <span style={{ fontSize: '1.1rem', color: '#64748b' }}>
-                    {summary.avgMinTemp}°C <span style={{ fontSize: '0.85rem' }}>(Avg Low)</span>
+                  <span>
+                    {summary.avgMinTemp}°C <span >(Avg Low)</span>
                   </span>
                 </div>
-                <p style={{ margin: '0.25rem 0 0 0', color: '#475569', fontWeight: 500 }}>
+                <p >
                   Predominantly {summary.dominantWeather.label} across {weatherData.daily.time.length} days
                 </p>
               </div>
@@ -130,26 +151,26 @@ export function DailyCast({ weather }: SubComponentProps) {
   if (!weather.weatherData?.daily) return null
 
   return (
-    <ul className='daily-cast-list' style={{ ...styles.dailyGrid, marginTop: '1rem' }}>
+    <ul className='daily-cast-list' >
       {weather.weatherData.daily.time.map((dateStr: string, index: number) => {
         const code = weather.weatherData?.daily?.weathercode?.[index] ?? -1
         const weatherDetails = getWeatherDetails(code)
 
         return (
-          <li key={dateStr} style={styles.dailyRow}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '1.25rem' }}>{weatherDetails.icon}</span>
+          <li key={dateStr} className="dailyRow">
+            <div >
+              <span >{weatherDetails.icon}</span>
               <div>
-                <span style={{ fontWeight: 500, display: 'block' }}>{dateStr}</span>
-                <span style={{ fontSize: '0.8rem', color: '#64748b' }}>{weatherDetails.label}</span>
+                <span >{dateStr}</span>
+                <span >{weatherDetails.label}</span>
               </div>
             </div>
 
-            <div style={{ textAlign: 'right' }}>
+            <div >
               <span>
                 High: <strong>{weather.weatherData?.daily?.temperature_2m_max[index]}°C</strong>
               </span>
-              <span style={{ color: '#64748b', marginLeft: '8px' }}>
+              <span >
                 Low: <strong>{weather.weatherData?.daily?.temperature_2m_min[index]}°C</strong>
               </span>
             </div>
