@@ -65,11 +65,29 @@ figure img{
    overflow: auto;
    min-height: 0
 }
+/* datepicker============= */
+.calender-container{
+    position: relative;
+    z-index: 10;
+    display: block;
+  
+}
+.rdrCalendarWrapper{
+    position: absolute;
+}
+/* Hide the Year select dropdown, keeping ONLY the Month select dropdown */
+.rdrYearPicker {
+  display: none !important;
+}
 /* desktop stylings */
 @media (min-width: 767px) {
      *{
     outline: 1px solid salmon;
     }
+    .rdrCalendarWrapper{
+    position: relative;
+}
+    /* =========== */
     .weather-pop-overlay,
     .mobile-only-btn{
         display: none;

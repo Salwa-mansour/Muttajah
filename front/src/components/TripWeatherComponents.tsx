@@ -10,49 +10,62 @@ interface SubComponentProps {
   weather: UseTripWeatherReturn
 }
 
-// 1. Date Picker Control Bar
 export function WeatherDatePicker({ weather }: SubComponentProps) {
-  const startDateStr = format(weather.range[0].startDate, 'MMM dd, yyyy')
-  const endDateStr = format(weather.range[0].endDate, 'MMM dd, yyyy')
+ const startDateStr = format(weather.range[0].startDate, 'MMM dd')
+  const endDateStr = format(weather.range[0].endDate, 'MMM dd')
   const isSingleDay = startDateStr === endDateStr
 
-  return (
-    <div style={styles.pickerContainer}>
-      <div style={styles.controlsGroup}>
-        <button type="button" onClick={() => weather.setIsOpen(!weather.isOpen)} style={styles.triggerBtn}>
-          📅 {isSingleDay ? startDateStr : `${startDateStr} — ${endDateStr}`}
-        </button>
+  const handleDateSelect = (ranges: any) => {
+    weather.handleSelect(ranges)
+    const selection = ranges.selection || Object.values(ranges)[0]
 
-        {/* <button
-          type="button"
-          onClick={weather.handleResetToToday}
-          style={{
-            ...styles.liveBtn,
-            background: weather.isLive ? '#dbeafe' : '#f1f5f9',
-            color: weather.isLive ? '#1d4ed8' : '#475569',
-          }}
-        >
-          Live Weather
-        </button> */}
+    if (selection) {
+      const { startDate, endDate } = selection
+      if (startDate && endDate && startDate.getTime() !== endDate.getTime()) {
+        weather.setIsOpen(false)
+      }
+    }
+  }
+
+  return (
+    <div style={styles.container}>
+      {/* 1. Label */}
+      <label style={styles.label}>Date</label>
+
+      {/* 2. Text field / Input Trigger */}
+      <div 
+        style={styles.textField} 
+        onClick={() => weather.setIsOpen(!weather.isOpen)}
+        role="button"
+        tabIndex={0}
+      >
+        <span style={styles.inputText}>
+          {isSingleDay ? startDateStr : `${startDateStr} - ${endDateStr}`}
+        </span>
+        {/* Calendar Icon */}
+        <svg style={styles.calendarIcon} viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
       </div>
 
+      {/* 3. Calendar Popover */}
       {weather.isOpen && (
         <div style={styles.popover}>
-          <DateRange
+        <DateRange
             ranges={weather.range}
-            onChange={weather.handleSelect}
-            minDate={weather.today}
-            maxDate={weather.oneYearFromNow}
-            showMonthAndYearPickers={false}
-            months={2}
-            direction="horizontal"
+            onChange={handleDateSelect}
+            // minDate={weather.today}
+            // maxDate={weather.oneYearFromNow}
+            showDateDisplay={false} /* 1. Hides top start & end date display bar */
+            showMonthAndYearPickers={true}
+            months={1}
+            direction="vertical"
             preventSnapRefocus={true}
+            // rangeColors={['#ffffff']}
           />
-          <div style={styles.popoverFooter}>
-            <button type="button" onClick={() => weather.setIsOpen(false)} style={styles.doneBtn}>
-              Done
-            </button>
-          </div>
         </div>
       )}
     </div>
@@ -149,52 +162,90 @@ export function DailyCast({ weather }: SubComponentProps) {
 
 // Combined Styles Object
 const styles: Record<string, React.CSSProperties> = {
-  pickerContainer: { position: 'relative', display: 'inline-block' },
-  controlsGroup: { display: 'flex', gap: '8px', alignItems: 'center' },
-  triggerBtn: {
+  // container: {
+  //   display: 'flex',
+  //   flexDirection: 'column' as const,
+  //   gap: '6px',
+  //   width: '240px',
+  //   fontFamily: 'sans-serif',
+  // },
+  // label: {
+  //   fontSize: '14px',
+  //   fontWeight: 500,
+  //   color: '#1e293b',
+  // },
+  // textField: {
+  //   display: 'flex',
+  //   alignItems: 'center',
+  //   justifyContent: 'space-between',
+  //   backgroundColor: '#e2e8f0',
+  //   padding: '8px 12px',
+  //   borderRadius: '8px',
+  //   cursor: 'pointer',
+  //   userSelect: 'none' as const,
+  // },
+  // inputText: {
+  //   fontSize: '14px',
+  //   fontWeight: 500,
+  //   color: '#0f172a',
+  // },
+  // calendarIcon: {
+  //   color: '#0f172a',
+  // },
+  // popover: {
+  //   // position: 'absolute' as const,
+  //   marginTop: '6px',
+  //   zIndex: 100,
+  //   borderRadius: '16px',
+  //   overflow: 'hidden',
+  //   boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.3)',
+  // },
+  // pickerContainer: { position: 'relative', display: 'inline-block' },
+  // controlsGroup: { display: 'flex', gap: '8px', alignItems: 'center' },
+  // triggerBtn: {
    
-    padding: '10px 16px',
-    borderRadius: '8px',
-    border: '1px solid #cbd5e1',
-    background: '#ffffff',
-    cursor: 'pointer',
-    fontWeight: 500,
-    fontSize: '0.9rem',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-  },
-  liveBtn: { padding: '10px 14px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: '0.85rem' },
-  popover: {
-    position: 'absolute',
-    top: '110%',
-    left: 0,
-    zIndex: 50,
-    background: '#ffffff',
-    borderRadius: '12px',
-    padding: '8px',
-    border: '1px solid #e2e8f0',
-    boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)',
-    overflowX: 'auto',
-    maxWidth: '90vw',
-  },
-  popoverFooter: { outline:'2px solid green', padding: '8px', textAlign: 'right', borderTop: '1px solid #f1f5f9' },
-  doneBtn: { padding: '6px 16px', background: '#2563eb', color: '#ffffff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 500 },
-  card: { marginTop: '1rem', padding: '1.25rem', background: '#f8fafc', borderRadius: '10px', border: '1px solid #e2e8f0' },
-  cardTitle: { margin: '0 0 1rem 0', color: '#1e293b' },
-  currentReading: { display: 'flex', gap: '1.5rem', alignItems: 'center' },
-  temp: { fontSize: '2rem', fontWeight: 'bold', color: '#0f172a' },
-  dailyGrid: { display: 'grid', gap: '0.75rem' },
-  dailyRow: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    padding: '0.5rem 0.75rem',
-    background: '#ffffff',
-    borderRadius: '6px',
-    border: '1px solid #cbd5e1',
-    fontSize: '0.9rem',
-  },
-  mutedText: { color: '#64748b', fontSize: '0.9rem' },
-  errorText: { color: '#ef4444' },
+  //   padding: '10px 16px',
+  //   borderRadius: '8px',
+  //   border: '1px solid #cbd5e1',
+  //   background: '#ffffff',
+  //   cursor: 'pointer',
+  //   fontWeight: 500,
+  //   fontSize: '0.9rem',
+  //   display: 'flex',
+  //   alignItems: 'center',
+  //   gap: '8px',
+  //   boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+  // },
+  // liveBtn: { padding: '10px 14px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: '0.85rem' },
+  // popover: {
+  //   position: 'absolute',
+  //   top: '110%',
+  //   left: 0,
+  //   zIndex: 50,
+  //   background: '#ffffff',
+  //   borderRadius: '12px',
+  //   padding: '8px',
+  //   border: '1px solid #e2e8f0',
+  //   boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)',
+  //   overflowX: 'auto',
+  //   maxWidth: '90vw',
+  // },
+  // popoverFooter: { outline:'2px solid green', padding: '8px', textAlign: 'right', borderTop: '1px solid #f1f5f9' },
+  // doneBtn: { padding: '6px 16px', background: '#2563eb', color: '#ffffff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 500 },
+  // card: { marginTop: '1rem', padding: '1.25rem', background: '#f8fafc', borderRadius: '10px', border: '1px solid #e2e8f0' },
+  // cardTitle: { margin: '0 0 1rem 0', color: '#1e293b' },
+  // currentReading: { display: 'flex', gap: '1.5rem', alignItems: 'center' },
+  // temp: { fontSize: '2rem', fontWeight: 'bold', color: '#0f172a' },
+  // dailyGrid: { display: 'grid', gap: '0.75rem' },
+  // dailyRow: {
+  //   display: 'flex',
+  //   justifyContent: 'space-between',
+  //   padding: '0.5rem 0.75rem',
+  //   background: '#ffffff',
+  //   borderRadius: '6px',
+  //   border: '1px solid #cbd5e1',
+  //   fontSize: '0.9rem',
+  // },
+  // mutedText: { color: '#64748b', fontSize: '0.9rem' },
+  // errorText: { color: '#ef4444' },
 }
