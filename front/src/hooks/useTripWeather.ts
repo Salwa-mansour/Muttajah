@@ -88,7 +88,7 @@ export function useTripWeather(location: LocationCoords) {
   const oneYearFromNow = addYears(today, 1)
 
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [dateRange, setDateRange] = useState<{ startDate: Date; endDate: Date }>({
+  const [dateRange, setDateRange] = useState<{ startDate: Date | null; endDate: Date | null }>({
     startDate: today,
     endDate: today,
   })
@@ -106,7 +106,8 @@ export function useTripWeather(location: LocationCoords) {
     },
   ])
 
-  const isTodaySelected = (start: Date, end: Date): boolean => {
+  const isTodaySelected = (start: Date | null, end: Date | null): boolean => {
+    if (!start || !end) return false
     const todayStr = format(today, 'yyyy-MM-dd')
     return format(start, 'yyyy-MM-dd') === todayStr && format(end, 'yyyy-MM-dd') === todayStr
   }
@@ -115,11 +116,16 @@ export function useTripWeather(location: LocationCoords) {
 
   const handleSelect = (ranges: RangeKeyDict): void => {
     const selection = ranges.selection
-    const startDate = selection.startDate || today
-    const endDate = selection.endDate || today
+    const startDate = selection.startDate
+    const endDate = selection.endDate
 
-    setRange([{ startDate, endDate, key: 'selection' }])
-    setDateRange({ startDate, endDate })
+    // Update UI range state for react-date-range display
+    setRange([{ startDate: startDate || today, endDate: endDate || today, key: 'selection' }])
+
+    // Only commit dateRange state when BOTH start and end dates are picked
+    if (startDate && endDate) {
+      setDateRange({ startDate, endDate })
+    }
   }
 
   const handleResetToToday = (): void => {
@@ -129,7 +135,24 @@ export function useTripWeather(location: LocationCoords) {
   }
 
   useEffect(() => {
+    // 1. Guard check: Both startDate and endDate must exist
     if (!location?.lat || !location?.lng || !dateRange.startDate || !dateRange.endDate) return
+
+    const { startDate, endDate } = dateRange
+
+    // 2. Guard check: Prevent requesting when dates are identical (in range mode)
+    //    Allow single-day fetch ONLY if the selected date is today
+    const startStr = format(startDate, 'yyyy-MM-dd')
+    const endStr = format(endDate, 'yyyy-MM-dd')
+    const todayStr = format(new Date(), 'yyyy-MM-dd')
+
+    const isSingleDay = startStr === endStr
+    const isToday = isSingleDay && startStr === todayStr
+
+    if (isSingleDay && !isToday) {
+      // User has only clicked the first date of a multi-day range; wait for second click
+      return
+    }
 
     const controller = new AbortController()
     setLoading(true)
@@ -140,16 +163,11 @@ export function useTripWeather(location: LocationCoords) {
     const maxForecastDate = new Date()
     maxForecastDate.setDate(todayDate.getDate() + 15)
 
-    const startStr = format(dateRange.startDate, 'yyyy-MM-dd')
-    const endStr = format(dateRange.endDate, 'yyyy-MM-dd')
-    const todayStr = format(todayDate, 'yyyy-MM-dd')
     const maxForecastStr = format(maxForecastDate, 'yyyy-MM-dd')
 
-    const isToday = startStr === todayStr && endStr === todayStr
     const isPast = endStr < todayStr
     const isBeyondForecast = endStr > maxForecastStr
 
-    // Define standard metrics requested for daily telemetry
     const dailyMetrics = [
       'temperature_2m_max',
       'temperature_2m_min',
@@ -162,10 +180,10 @@ export function useTripWeather(location: LocationCoords) {
     let url = ''
 
     if (isBeyondForecast) {
-      const pastStart = new Date(dateRange.startDate)
+      const pastStart = new Date(startDate)
       pastStart.setFullYear(pastStart.getFullYear() - 1)
 
-      const pastEnd = new Date(dateRange.endDate)
+      const pastEnd = new Date(endDate)
       pastEnd.setFullYear(pastEnd.getFullYear() - 1)
 
       const fallbackStartStr = format(pastStart, 'yyyy-MM-dd')
