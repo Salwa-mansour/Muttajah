@@ -1,6 +1,6 @@
 import React from 'react'
 import { DateRange } from 'react-date-range'
-import { format } from 'date-fns'
+import { format ,parseISO,isValid } from 'date-fns'
 import { UseTripWeatherReturn, getWeatherDetails, calculateDailySummary } from '../hooks/useTripWeather'
 
 import 'react-date-range/dist/styles.css'
@@ -38,7 +38,7 @@ export function WeatherDatePicker({ weather }: SubComponentProps) {
               <span>Search the weather in spisific period</span> 
           </label> */}
           <div 
-            className='date-text '
+            className='date-text box'
             id='date-toggler'
             onClick={() => weather.setIsOpen(!weather.isOpen)}
             role="button"
@@ -93,61 +93,142 @@ export function WeatherDatePicker({ weather }: SubComponentProps) {
   )
 }
 
+
 // 2. Weather Overview Summary (Current Reading or Aggregate Summary)
 export function WeatherSummary({ weather }: SubComponentProps) {
-  if (weather.loading) return <p style={styles.mutedText}>Fetching weather data...</p>
-  if (weather.error) return <p style={styles.errorText}>Error: {weather.error}</p>
+  if (weather.loading) return <p className="weather-message">Fetching weather data...</p>
+  if (weather.error) return <p className="weather-message error">Error: {weather.error}</p>
   if (!weather.weatherData) return null
 
   const { weatherData } = weather
 
-  return (
-    <div className='weather-container'>
-      <h4 >Weather Overview</h4>
-      {weatherData.current_weather ? (
-        <div >
-          <span >
-            {getWeatherDetails(weatherData.current_weather.weathercode).icon}
-          </span>
-          <div>
-            <span >{weatherData.current_weather.temperature}°C</span>
-            <p >
-              {getWeatherDetails(weatherData.current_weather.weathercode).label}
-            </p>
-          </div>
-        </div>
-      ) : weatherData.daily ? (
-        (() => {
-          const summary = calculateDailySummary(weatherData.daily)
-          if (!summary) return null
+  // Determine metrics based on current vs aggregate daily mode
+  let mainIcon: React.ReactNode = null
+  let tempHigh: number = 0
+  let tempLow: number | null = null
+  let precip: number = 0
+  let humidity: number = 0
+  let windSpeed: number = 0
 
-          return (
-            <div className='daily-weather' >
-              <span >{summary.dominantWeather.icon}</span>
-              <div>
-                <div >
-                  <span >
-                    {summary.avgMaxTemp}°C
-                    <span > (Avg High)</span>
-                  </span>
-                  <span>
-                    {summary.avgMinTemp}°C <span >(Avg Low)</span>
-                  </span>
-                </div>
-                <p >
-                  Predominantly {summary.dominantWeather.label} across {weatherData.daily.time.length} days
-                </p>
-              </div>
-            </div>
-          )
-        })()
-      ) : null}
+  if (weatherData.current_weather) {
+    const code = weatherData.current_weather.weathercode
+    mainIcon = getWeatherDetails(code).icon
+    tempHigh = Math.round(weatherData.current_weather.temperature)
+    tempLow = weatherData.daily?.temperature_2m_min?.[0] 
+      ? Math.round(weatherData.daily.temperature_2m_min[0]) 
+      : null
+    precip = weatherData.daily?.precipitation_probability_max?.[0] ?? 0
+    humidity = weatherData.daily?.relative_humidity_2m_mean?.[0] ?? 0
+    windSpeed = Math.round(
+      weatherData.current_weather.windspeed ?? weatherData.daily?.windspeed_10m_max?.[0] ?? 0
+    )
+  } else if (weatherData.daily) {
+    const summary = calculateDailySummary(weatherData.daily)
+    if (!summary) return null
+
+    mainIcon = summary.dominantWeather.icon
+    tempHigh = Math.round(summary.avgMaxTemp)
+    tempLow = Math.round(summary.avgMinTemp)
+
+    const daily = weatherData.daily
+    precip = daily.precipitation_probability_max
+      ? Math.round(daily.precipitation_probability_max.reduce((a, b) => a + b, 0) / daily.precipitation_probability_max.length)
+      : 0
+    humidity = daily.relative_humidity_2m_mean
+      ? Math.round(daily.relative_humidity_2m_mean.reduce((a, b) => a + b, 0) / daily.relative_humidity_2m_mean.length)
+      : 0
+    windSpeed = daily.windspeed_10m_max
+      ? Math.round(daily.windspeed_10m_max.reduce((a, b) => a + b, 0) / daily.windspeed_10m_max.length)
+      : 0
+  }
+
+  return (
+    <div className="weather-card" title='Weather Overview'>
+      {/* Top Row: Main Illustration on Left, Temperatures on Right */}
+      <div className="weather-main-row">
+        <div className="weather-hero-icon">
+          {mainIcon}
+        </div>
+
+        <div className="weather-temp-display">
+          <span className="temp-main">{tempHigh}°</span>
+          {tempLow !== null && (
+            <>
+              <span className="temp-divider">/</span>
+              <span className="temp-sub">{tempLow}°</span>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Bottom Row: 3 Metrics */}
+      <ul className="weather-metrics-grid">
+        <li className="metric-item">
+          <span className="metric-icon">🌧️</span>
+          <span className="metric-value">{precip}%</span>
+          <span className="metric-label">Precipitation</span>
+        </li>
+
+        <li className="metric-item">
+          <span className="metric-icon">💧</span>
+          <span className="metric-value">{humidity}%</span>
+          <span className="metric-label">Humidity</span>
+        </li>
+
+        <li className="metric-item">
+          <span className="metric-icon">💨</span>
+          <span className="metric-value">{windSpeed}km/h</span>
+          <span className="metric-label">Wind Speed</span>
+        </li>
+      </ul>
     </div>
   )
 }
 
 // 3. Daily Forecast List
 export function DailyCast({ weather }: SubComponentProps) {
+  if (!weather.weatherData?.daily) return null
+
+  const { daily } = weather.weatherData
+
+  return (
+    <ul className="daily-cast-list">
+      {daily.time.map((dateStr: string, index: number) => {
+        const code = daily.weathercode?.[index] ?? -1
+        const weatherDetails = getWeatherDetails(code)
+
+        // Parse raw date string and format as Month and Day (e.g., "Sep 11")
+        const parsedDate = parseISO(dateStr)
+        const formattedDate = isValid(parsedDate) ? format(parsedDate, 'MMM d') : dateStr
+
+        const tempMax = Math.round(daily.temperature_2m_max[index])
+        const tempMin = Math.round(daily.temperature_2m_min[index])
+
+        return (
+          <li key={dateStr} className="daily-cast-row">
+            <span className="daily-day">{formattedDate}</span>
+
+            <div className="daily-state">
+             <span className="daily-icon"> {weatherDetails.icon}</span>
+               <span className="daily-label">{weatherDetails.label}</span>
+
+            </div>
+
+           
+            <span className="daily-temp daily-temp-high">
+              {tempMax >= 0 ? `+${tempMax}` : tempMax}°
+            </span>
+
+            <span className="daily-temp daily-temp-low">
+              {tempMin >= 0 ? `+${tempMin}` : tempMin}°
+            </span>
+          </li>
+        )
+      })}
+    </ul>
+  )
+}
+export function DailyCast2({ weather }: SubComponentProps) {
   if (!weather.weatherData?.daily) return null
 
   return (

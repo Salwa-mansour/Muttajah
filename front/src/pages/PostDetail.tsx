@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { PortableText } from '@portabletext/react'
 import { client } from '../sanity/sanityClient'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import { Post } from './Posts'
 import { customPortableTextComponents } from '../components/PortableTextComponents'
+import {faList} from '@fortawesome/free-solid-svg-icons'
 import TripWeather from '../components/TripWeather'
 import { urlFor } from '../utils/urlFor'
 import '../css/postDetail.css'
@@ -82,10 +84,11 @@ export default function PostDetail() {
                   {/* INLINE / DESKTOP VIEW */}
                   <div className="weather-inline-wrapper">
                    
-                    <div className='weather-summary-wrapper'>
+                    <div className='weather-summary-wrapper box'>
                        <WeatherSummary weather={weather} />
                         <button className="mobile-only-btn" onClick={() => setIsPopOpen(true)}>
-                        🌤️ Open Weather Details
+                        <FontAwesomeIcon icon={faList} />
+                         Show daily cast
                         </button>
                     </div>
                     <div className='datePicker-wrapper'>
@@ -93,7 +96,7 @@ export default function PostDetail() {
                         <WeatherDatePicker weather={weather} />
                     </div>
                     {/* Hidden on mobile via CSS rules, visible on desktop */}
-                    <div className="desktop-daily-cast">
+                    <div className="desktop-daily-cast box">
                       <DailyCast weather={weather} />
                     </div>
                   </div>

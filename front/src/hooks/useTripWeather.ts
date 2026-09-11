@@ -18,6 +18,9 @@ export interface OpenMeteoResponse {
     temperature_2m_max: number[]
     temperature_2m_min: number[]
     weathercode: number[]
+    precipitation_probability_max?: number[]
+    relative_humidity_2m_mean?: number[]
+    windspeed_10m_max?: number[]
   }
 }
 
@@ -146,6 +149,16 @@ export function useTripWeather(location: LocationCoords) {
     const isPast = endStr < todayStr
     const isBeyondForecast = endStr > maxForecastStr
 
+    // Define standard metrics requested for daily telemetry
+    const dailyMetrics = [
+      'temperature_2m_max',
+      'temperature_2m_min',
+      'weathercode',
+      'precipitation_probability_max',
+      'relative_humidity_2m_mean',
+      'windspeed_10m_max'
+    ].join(',')
+
     let url = ''
 
     if (isBeyondForecast) {
@@ -160,13 +173,13 @@ export function useTripWeather(location: LocationCoords) {
 
       setIsHistoricalFallback(true)
 
-      url = `https://archive-api.open-meteo.com/v1/archive?latitude=${location.lat}&longitude=${location.lng}&start_date=${fallbackStartStr}&end_date=${fallbackEndStr}&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto`
+      url = `https://archive-api.open-meteo.com/v1/archive?latitude=${location.lat}&longitude=${location.lng}&start_date=${fallbackStartStr}&end_date=${fallbackEndStr}&daily=${dailyMetrics}&timezone=auto`
     } else if (isPast) {
-      url = `https://archive-api.open-meteo.com/v1/archive?latitude=${location.lat}&longitude=${location.lng}&start_date=${startStr}&end_date=${endStr}&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto`
+      url = `https://archive-api.open-meteo.com/v1/archive?latitude=${location.lat}&longitude=${location.lng}&start_date=${startStr}&end_date=${endStr}&daily=${dailyMetrics}&timezone=auto`
     } else if (isToday) {
-      url = `https://api.open-meteo.com/v1/forecast?latitude=${location.lat}&longitude=${location.lng}&current_weather=true&daily=temperature_2m_max,temperature_2m_min&timezone=auto`
+      url = `https://api.open-meteo.com/v1/forecast?latitude=${location.lat}&longitude=${location.lng}&current_weather=true&daily=${dailyMetrics}&timezone=auto`
     } else {
-      url = `https://api.open-meteo.com/v1/forecast?latitude=${location.lat}&longitude=${location.lng}&start_date=${startStr}&end_date=${endStr}&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto`
+      url = `https://api.open-meteo.com/v1/forecast?latitude=${location.lat}&longitude=${location.lng}&start_date=${startStr}&end_date=${endStr}&daily=${dailyMetrics}&timezone=auto`
     }
 
     fetch(url, { signal: controller.signal })

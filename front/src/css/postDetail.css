@@ -6,7 +6,11 @@
 }
 .postDetail-container{
     --post-page-margin:1rem;
+    --border-radius:6%;
+    --container-background: hsl(0deg 0% 100% / 60%);
+    --container-shadow:0px 1px 12px 3px hsla(0, 0%, 0%, 0.2);
     padding: 0;
+
 }
 .single-page-content{
     width: 100%;
@@ -16,6 +20,7 @@
     position: relative;
     width: 100%;
     height: 50vh;
+  
 }
 figure img{
     position: absolute;
@@ -61,10 +66,11 @@ figure img{
     flex-direction: column;
     height: 100%;
 }
-.weather-pop-content .daily-cast-list{
+ .daily-cast-list{
+    position: relative;
      flex: 1;
    overflow: auto;
-   min-height: 0
+   min-height: 0;
 }
 /* datepicker============= */
 .calender-container{
@@ -80,18 +86,26 @@ figure img{
 .rdrYearPicker {
   display: none !important;
 }
-.datePicker-wrapper{
-    outline: 2px solid salmon;
+.date-text{
+   position: relative;
+    cursor: pointer;
+   
+}
+.box{
+    border-radius: var(--border-radius);
+    margin: var(--post-page-margin);
+    padding: var(--post-page-margin);
+    background-color: var(--container-background);
+    box-shadow: var(--container-shadow);
 }
 .weather-summary-wrapper{
-    margin:var(--post-page-margin);
-    padding:var(--post-page-margin);
-    border-radius: 6%;
-    background: hsl(0deg 0% 100% / 60%);
-    box-shadow: 0px 1px 12px 3px hsla(0, 0%, 0%, 0.2);
-
+  
 }
 .search-icon{
+    position: absolute;
+    inset-inline-end:.5rem;
+    top: 50%;
+    transform: translateY(-50%);
     width: 30px;
     height: 30px;
 }
@@ -99,6 +113,224 @@ figure img{
     width: 100%;
     height: 100%;
     object-fit: contain;
+}
+/* weather summary */
+/* Card Container */
+.weather-card {
+  width: 100%;
+  /* max-width: 380px; */
+  /* padding: 24px 28px; */
+  /* border-radius: 24px; */
+  /* background: rgba(30, 30, 35, 0.65); */
+  /* backdrop-filter: blur(16px); */
+  /* -webkit-backdrop-filter: blur(16px); */
+  /* border: 1px solid rgba(255, 255, 255, 0.12); */
+  /* box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4); */
+  /* color: #ffffff; */
+  /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; */
+  /* box-sizing: border-box; */
+}
+
+/* Top Section: Hero Icon & Temperature */
+.weather-main-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding: 0 8px;
+}
+
+.weather-hero-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 64px; /* Scaled for SVG or emoji icon */
+  line-height: 1;
+}
+
+.weather-hero-icon svg {
+  width: 80px;
+  height: 80px;
+}
+
+.weather-temp-display {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.temp-main {
+  font-size: 58px;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+.temp-divider {
+  font-size: 36px;
+  font-weight: 300;
+  /* color: rgba(255, 255, 255, 0.8); */
+  margin: 0 2px;
+}
+
+.temp-sub {
+  font-size: 28px;
+  font-weight: 300;
+  /* color: rgba(255, 255, 255, 0.85); */
+}
+.rdrCalendarWrapper{
+    border-radius: var(--border-radius);
+    box-shadow: var(--container-shadow);
+    margin-inline: var(--post-page-margin);
+}
+/* Bottom Metrics Grid */
+.weather-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.metric-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.metric-icon {
+  font-size: 20px;
+  margin-bottom: 8px;
+  opacity: 0.9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+}
+
+.metric-icon svg {
+  width: 22px;
+  height: 22px;
+  /* stroke: #ffffff; */
+}
+
+.metric-value {
+  font-size: 15px;
+  font-weight: 600;
+  /* color: #ffffff; */
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.metric-label {
+  font-size: 12px;
+  font-weight: 400;
+ 
+  line-height: 1.2;
+}
+
+/* Loading & Error States */
+.weather-message {
+ 
+  font-size: 14px;
+}
+
+.weather-message.error {
+  color: #ff6b6b;
+}
+/* daily list ========== */
+/* Container List */
+.daily-cast-list {
+  display: flex;
+  flex-direction: column;
+ 
+  width: 100%;
+ 
+  margin: 0;
+  list-style: none;
+
+  /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  */
+}
+
+/* Row Grid: Columns align perfectly across all rows */
+.daily-cast-row {
+  display: grid;
+  grid-template-columns: 3.5rem  1fr auto auto;
+  align-items: center;
+  gap: .5rem;
+   padding-block: var(--post-page-margin);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.daily-cast-row .daily-state{
+        display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .25rem;
+}
+/* Day Name Column */
+.daily-day {
+  font-size: 17px;
+  font-weight: 400;
+ 
+  white-space: nowrap;
+}
+
+/* Weather Icon Container */
+.daily-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  height: 36px;
+  width: 36px;
+}
+
+.daily-icon svg {
+  width: 36px;
+  height: 36px;
+}
+
+/* Weather Condition Label */
+.daily-label {
+  font-size: 15px;
+  font-weight: 400;
+  
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Temperature Values */
+.daily-temp {
+  font-size: 17px;
+  font-weight: 400;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.daily-temp-high {
+  
+  min-width: 44px;
+}
+
+.daily-temp-low {
+  
+  min-width: 44px;
+}
+@media (max-width:766px){
+   .date-popover{
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    background: #00000075;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   }
 }
 /* desktop stylings */
 @media (min-width: 767px) {
@@ -110,6 +342,13 @@ figure img{
     .mobile-only-btn{
         display: none;
     }
+    .mobile-only-btn{
+     position: relative;
+    padding: 1rem;
+    margin: 1rem auto;
+    border: 0 oldlace;
+    background: wheat;
+    }
     .desktop-daily-cast{
         display: block;
     }
@@ -117,7 +356,7 @@ figure img{
     width: 300px;
     }
     .single-page-content{
-        --side-space: 350px;
+        --side-space: 22.75rem;
         --post-page-margin:1rem;
         grid-template-columns:var(--side-space) 1fr;
        grid-template-areas: 
@@ -143,13 +382,13 @@ figure img{
     height: 100vh;
    }
    .desktop-daily-cast{
-    
+       position: relative;
         flex: 1;
         overflow: auto;
         min-height: 0;
         /* transform: scaleX(-1); */
    }
-   .weather-inline-wrapper::after{
+   /* .desktop-daily-cast::after{
     content: " ";
     outline: 1px solid green;
     position: absolute;
@@ -159,15 +398,14 @@ figure img{
     left: 0;
    z-index: 10;
    pointer-events: none;
-   /* 2. Control gradient color stops */
-  /* #f9f6f0 starts solid at 0% (bottom), remains solid up to 20%, then fades out to transparent at 100% (top) */
+  
   background-image: linear-gradient(
     0deg, 
     #f9f6f0 0%, 
     rgba(249, 246, 240, 0.8) 35%, 
     transparent 100%
   );
-}
+} */
    /* .desktop-daily-cast *{
          transform: scaleX(-1);
    } */
