@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import logo from '../assets/logoipsum-380.png'
+
 
 const style = {
   footer: {
@@ -144,7 +144,7 @@ function Footer() {
       <div style={style.topSection}>
         <div style={style.brandColumn}>
           <Link to="/" className="funky-logo-wrapper" style={style.logoWrapper}>
-            <img src={logo} alt="logo" style={style.logo} />
+            <img src='https://res.cloudinary.com/du6d1qifw/image/upload/v1789199121/muttajahSite/logoipsum-380_jsncbq.png' alt="logo" style={style.logo} />
           </Link>
           <p style={style.tagline}>
             Ready for your next adventure? ✨ Explore forecasts, secret spots, and epic journeys! 🚀

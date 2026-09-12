@@ -3,7 +3,6 @@ import   gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'                    
 import '../css/home.css'
-import heroImage from '../assets/johannes-plenio-bhCdwWNmXw8-unsplash.jpg'
 import Features from '../components/Features'
 import { Link } from 'react-router-dom'
 
@@ -61,7 +60,7 @@ function Home() {
         <div className="hero-image-wrapper">
           <img
             className="hero-image"
-            src={heroImage}
+            src='https://res.cloudinary.com/du6d1qifw/image/upload/v1789204380/muttajahSite/johannes-plenio-bhCdwWNmXw8-unsplash_wcpy8n.jpg'
             alt="Hero background visual"
           />
 

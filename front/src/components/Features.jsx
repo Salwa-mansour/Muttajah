@@ -6,23 +6,20 @@ import '@dotlottie/react-player/dist/index.css';
 import { useGSAP } from '@gsap/react'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { MotionPathPlugin } from 'gsap/MotionPathPlugin'                   
-import featrue_1_img from '../assets/stephen-crane-hPuCMQLiZ8U-unsplash.jpg'
-import featrue_3_img from '../assets/soma-laszlo-rt4SRyA29TE-unsplash.jpg'
-import featrue_2_img from '../assets/david-becker-6BPmpe2o1aw-unsplash.jpg'
-import featrue_4_img from '../assets/stanislav-margolin-CRmUtjJE3nM-unsplash.jpg'
-import featrue_5_img from '../assets/compagnons-z2_GyXqzOcE-unsplash.jpg'
 import rainLottieData from '../assets/Lottie/Rain.json';
 import snowLottieData from '../assets/Lottie/snow fall.json';
 import '../css/features.css'
 
+
 gsap.registerPlugin(ScrollTrigger, MotionPathPlugin, useGSAP)
+// Initialize Cloudinary instance outside component
 
 function Features() {
      const containerRef = useRef()
      const headingRef = useRef(null);
      const rainLottieRef = useRef(null);
      const snowLottieRef = useRef(null);
-
+          
         useGSAP(() => {
 
           gsap.from(headingRef.current.children, {
@@ -553,7 +550,8 @@ bindScrollToLabels(allFeatures[3], "rainyStart", "rainyEnd", {
     <div className='features-container'>
    {/* Feature cards sit inside .features alongside .background  */}
   <div className="feature sunny-feature">
-    <img src={featrue_1_img} alt="Feature 1" width="300" />
+  
+  <img src='https://res.cloudinary.com/du6d1qifw/image/upload/v1789199374/muttajahSite/stephen-crane-hPuCMQLiZ8U-unsplash_ljum9m.jpg' />
     <div className="feature-content">
       <h2>Feature 1</h2>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
@@ -561,7 +559,7 @@ bindScrollToLabels(allFeatures[3], "rainyStart", "rainyEnd", {
   </div>
 
   <div className="feature cloud-sun-feature">
-    <img src={featrue_2_img} alt="Feature 2" width="300" />
+    <img src='https://res.cloudinary.com/du6d1qifw/image/upload/v1789203541/muttajahSite/david-becker-6BPmpe2o1aw-unsplash_muo5dk.jpg' alt="Feature 2" width="300" />
     <div className="feature-content">
       <h2>Feature 2</h2>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
@@ -569,7 +567,7 @@ bindScrollToLabels(allFeatures[3], "rainyStart", "rainyEnd", {
   </div>
 
   <div className="feature cloudy-feature">
-    <img src={featrue_3_img} alt="Feature 3" width="300" />
+    <img src='https://res.cloudinary.com/du6d1qifw/image/upload/v1789199406/muttajahSite/soma-laszlo-rt4SRyA29TE-unsplash_rwfwii.jpg' alt="Feature 3" width="300" />
     <div className="feature-content">
       <h2>Feature 3</h2>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
@@ -577,7 +575,7 @@ bindScrollToLabels(allFeatures[3], "rainyStart", "rainyEnd", {
   </div>
 
   <div className="feature rainy-feature">
-    <img src={featrue_4_img} alt="Feature 4" width="300" />
+    <img src='https://res.cloudinary.com/du6d1qifw/image/upload/v1789199316/muttajahSite/stanislav-margolin-CRmUtjJE3nM-unsplash_lmd5rt.jpg' alt="Feature 4" width="300" />
     <div className="feature-content">
       <h2>Feature 4</h2>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
@@ -585,7 +583,7 @@ bindScrollToLabels(allFeatures[3], "rainyStart", "rainyEnd", {
   </div>
 
   <div className="feature snowy-feature">
-    <img src={featrue_5_img} alt="Feature 5" width="300" />
+    <img src='https://res.cloudinary.com/du6d1qifw/image/upload/v1789203977/muttajahSite/compagnons-z2_GyXqzOcE-unsplash_tztju3.jpg' alt="Feature 5" width="300" />
     <div className="feature-content">
       <h2>Feature 5</h2>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>

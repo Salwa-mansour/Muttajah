@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { client } from '../sanity/sanityClient'
 import { urlFor } from '../utils/urlFor'
-import header_img from '../assets/stephen-crane-hPuCMQLiZ8U-unsplash.jpg'
-
 export interface Post {
   _id: string
   title: string
@@ -66,7 +64,7 @@ export default function Posts() {
     <>
       <header className="page-header">
         <figure className="header-img" tabIndex={-1}>
-          <img src={header_img} alt="Page header" />
+          <img src='https://res.cloudinary.com/du6d1qifw/image/upload/v1789199316/muttajahSite/stanislav-margolin-CRmUtjJE3nM-unsplash_lmd5rt.jpg' alt="Page header" />
         </figure>
         <form className="search-post" onSubmit={(e) => e.preventDefault()}>
           <input

@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import logo from '../assets/logoipsum-380.png'
+
 import { Link, useLocation } from 'react-router-dom'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
@@ -100,7 +100,7 @@ function Nav() {
   return (
     <nav className={`nav `} ref={containerRef}>
       <Link to="/" className="logo" onClick={handleLinkClick}>
-        <img src={logo} alt="logo" />
+        <img src='https://res.cloudinary.com/du6d1qifw/image/upload/v1789199121/muttajahSite/logoipsum-380_jsncbq.png' alt="logo" />
       </Link>
 
       <button className="toggle-nav" onClick={toggleMenu} aria-label="Toggle Navigation">
