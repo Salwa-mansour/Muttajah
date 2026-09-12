@@ -1,27 +1,26 @@
 import { Link } from 'react-router-dom'
 
-
 const style = {
   footer: {
     width: '100%',
-    backgroundColor: '#0F1123', // Deep midnight background
+    backgroundColor: '#4790ff', // Base vibrant blue
     backgroundImage: `
-      radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.15) 0%, transparent 40%),
-      radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.15) 0%, transparent 40%)
+      radial-gradient(circle at 10% 20%, rgba(255, 182, 71, 0.25) 0%, transparent 40%),
+      radial-gradient(circle at 90% 80%, rgba(15, 17, 35, 0.35) 0%, transparent 50%)
     `,
     color: '#fff',
     padding: '5rem 8% 3rem 8%',
     display: 'flex',
     flexDirection: 'column',
     gap: '3.5rem',
-    borderTop: '2px dashed rgba(56, 189, 248, 0.3)', // Funky dashed border line
+  
     position: 'relative',
     overflow: 'hidden',
   },
   topSection: {
     display: 'flex',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    justify: 'space-between',
     alignItems: 'center',
     gap: '3rem',
   },
@@ -30,61 +29,64 @@ const style = {
     flexDirection: 'column',
     gap: '1.25rem',
     maxWidth: '380px',
+    marginInlineEnd: 'auto',
   },
   logoWrapper: {
     display: 'inline-block',
     padding: '12px 20px',
-    background: 'rgba(255, 255, 255, 0.05)',
+    background: 'rgba(15, 17, 35, 0.25)',
     borderRadius: '24px',
-    border: '2px solid rgba(56, 189, 248, 0.4)',
-    boxShadow: '0 0 25px rgba(56, 189, 248, 0.25), inset 0 0 10px rgba(168, 85, 247, 0.2)',
-    transform: 'rotate(-2deg)', // Funky subtle tilt
+    border: '2px solid #fffbf4cc',
+    boxShadow: '0 0 20px rgba(255, 182, 71, 0.35), inset 0 0 10px rgba(255, 182, 71, 0.15)',
+    transform: 'rotate(-2deg)',
     transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
     cursor: 'pointer',
-    width: 'fit-content',
+    height:'90px',
+    width: 'min(80vw, 500px)',
   },
   logo: {
-    height: '75px', // Significantly larger logo
-    width: 'auto',
+   width: '100%',
+    height: '100%',
     objectFit: 'contain',
-    filter: 'drop-shadow(0 4px 12px rgba(56, 189, 248, 0.4))',
+    filter: 'drop-shadow(0 4px 12px rgba(15, 17, 35, 0.3))',
   },
   tagline: {
-    color: '#CBD5E1',
+    color: '#F8FAFC',
     fontSize: '1.05rem',
     lineHeight: '1.6',
     margin: 0,
     fontWeight: '500',
+    textShadow: '0 1px 2px rgba(0,0,0,0.15)',
   },
   linksGroup: {
     display: 'flex',
     flexWrap: 'wrap',
     gap: '2rem',
+    justifyContent:'center',
   },
   cardColumn: {
     display: 'flex',
     flexDirection: 'column',
     gap: '1rem',
-    background: 'rgba(255, 255, 255, 0.03)',
+    background: 'rgba(15, 17, 35, 0.25)', // Darker translucent backdrop for strong legibility
     backdropFilter: 'blur(12px)',
     padding: '1.75rem 2rem',
     borderRadius: '20px',
-    border: '1px solid rgba(255, 255, 255, 0.08)',
-    boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.3)',
+    border: '1px solid rgba(255, 255, 255, 0.2)',
+    boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.15)',
     minWidth: '160px',
   },
   heading: {
-    background: 'linear-gradient(135deg, #38BDF8 0%, #A855F7 100%)',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
+    color: '#ffb647', // Primary warm yellow/orange accent
     fontSize: '1.25rem',
     fontWeight: '800',
     letterSpacing: '0.05em',
     textTransform: 'uppercase',
     marginBottom: '0.25rem',
+    textShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
   },
   link: {
-    color: '#F1F5F9',
+    color: '#FFFFFF',
     textDecoration: 'none',
     fontSize: '1rem',
     fontWeight: '600',
@@ -93,15 +95,15 @@ const style = {
     transition: 'all 0.2s ease',
   },
   bottomSection: {
-    borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+    borderTop: '1px solid rgba(255, 255, 255, 0.25)',
     paddingTop: '2rem',
     display: 'flex',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    justify: 'space-between',
     alignItems: 'center',
     gap: '1.5rem',
     fontSize: '0.9rem',
-    color: '#94A3B8',
+    color: '#E2E8F0',
   },
   copyright: {
     margin: 0,
@@ -112,7 +114,7 @@ const style = {
     gap: '1.5rem',
   },
   badge: {
-    background: 'linear-gradient(90deg, #FF7E5F, #FEB47B)',
+    background: '#ffb647',
     color: '#0F1123',
     padding: '4px 10px',
     borderRadius: '12px',
@@ -127,15 +129,15 @@ const style = {
 function Footer() {
   return (
     <footer className="footer" style={style.footer}>
-      {/* Injecting CSS for interactive hover states */}
+      {/* Injecting CSS for interactive hover states matching #ffb647 */}
       <style>{`
         .funky-logo-wrapper:hover {
           transform: rotate(2deg) scale(1.05) !important;
-          border-color: #A855F7 !important;
-          box-shadow: 0 0 35px rgba(168, 85, 247, 0.4) !important;
+          border-color: #FFFFFF !important;
+          box-shadow: 0 0 35px rgba(255, 182, 71, 0.6) !important;
         }
         .funky-link:hover {
-          color: #38BDF8 !important;
+          color: #ffb647 !important;
           transform: translateX(6px);
         }
       `}</style>

@@ -219,7 +219,7 @@ const mobileAnimations = () => {
     trigger:allFeatures[2],
     start:'top center',
     scrub:2,
-    markers:true
+    // markers:true
   }
 })
 
@@ -402,7 +402,7 @@ const bgFade = gsap.to('.cloudy-bg',{
     trigger:allFeatures[2],
     start:'top center',
     scrub:2,
-    markers:true
+    // markers:true
   }
 })
 

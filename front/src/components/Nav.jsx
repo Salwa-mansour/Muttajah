@@ -105,7 +105,7 @@ function Nav() {
 
       <button className="toggle-nav" onClick={toggleMenu} aria-label="Toggle Navigation">
         <svg viewBox="0 0 100 100" width="200" height="200" className="humbergur-icon">
-          <g stroke="#38BDF8" strokeWidth="6" strokeLinecap="round">
+          <g stroke="#4790ff" strokeWidth="6" strokeLinecap="round">
             <line x1="25" y1="35" x2="75" y2="35" id="line-1" />
             <line x1="25" y1="50" x2="75" y2="50" id="line-2" />
             <line x1="25" y1="65" x2="75" y2="65" id="line-3" />
