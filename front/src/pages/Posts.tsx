@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { client } from '../sanity/sanityClient'
 import { urlFor } from '../utils/urlFor'
-// import '/css/index.css'
+import header_img from '../assets/stephen-crane-hPuCMQLiZ8U-unsplash.jpg'
 
 export interface Post {
   _id: string
   title: string
   slug: { current: string }
-  mainImage:any
+  mainImage: any
   body: any
 
   locationDetails?: {
@@ -22,11 +22,15 @@ export interface Post {
 export default function Posts() {
   const [posts, setPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
+  
+  // 1. Keep track of immediate input value & debounced value separately
+  const [searchTerm, setSearchTerm] = useState('')
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
 
   useEffect(() => {
     // GROQ Query to fetch post details + custom location object
     client
-      .fetch(`*[_type == "post"]{ _id, title, slug,mainImage, locationDetails }`)
+      .fetch(`*[_type == "post"]{ _id, title, slug, mainImage, locationDetails }`)
       .then((data) => {
         setPosts(data)
         setLoading(false)
@@ -37,74 +41,77 @@ export default function Posts() {
       })
   }, [])
 
-  if (loading) return <p>Loading travel stories...</p>
+  // 2. Debounce effect: Wait 400ms after user stops typing before updating debouncedSearchTerm
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm)
+    }, 400) // 400ms delay
+
+    return () => clearTimeout(timer) // Clear timer if user types again before 400ms passes
+  }, [searchTerm])
+
+  // 3. Filter using debouncedSearchTerm instead of raw input value
+  const filteredPosts = posts.filter((post) => {
+    const query = debouncedSearchTerm.toLowerCase().trim()
+    if (!query) return true
+
+    const titleMatch = post.title?.toLowerCase().includes(query)
+    const cityMatch = post.locationDetails?.cityName?.toLowerCase().includes(query)
+    const countryMatch = post.locationDetails?.countryName?.toLowerCase().includes(query)
+
+    return titleMatch || cityMatch || countryMatch
+  })
 
   return (
-   <> 
-  <section className='posts-container container'>
-  {posts.map((post) => (
-        <article   key={post._id} className='item-card' >
-            <figure className='post-img'>
-              {post.mainImage && post.mainImage.asset && (
-                <img
-                  // Use urlFor to generate the source, define a width, and auto-format to WebP
-                  src={urlFor(post.mainImage).width(1200).height(600).url()}
-                  alt={post.title}
-                
-                />
-              )}
-            </figure>
-               <div className='card-info'>
-                  {post.locationDetails && (
-                        <h6 className='location' >
-                          📍 {post.locationDetails.cityName}, {post.locationDetails.countryName}
-                        </h6>
-                      )}
-                  <h3 className='post-title'>
-                      {post.title}
-                  </h3>
-                  <p className='post-desc'>
-                      post descrtion
-                  </p>
-                  <Link   to={`/post/${post._id}`} title='read more' className='card-link' ></Link>
-            </div>{/*card-info */}
-            
-        </article>
-        ))}
-</section>
-     {/* <div>
-      <h1>Travel Stories</h1>
-      <div >
-        {posts.map((post) => (
-          <article
-            key={post._id}
-           
-          >
-            <h2>{post.title}</h2>
+    <>
+      <header className="page-header">
+        <figure className="header-img" tabIndex={-1}>
+          <img src={header_img} alt="Page header" />
+        </figure>
+        <form className="search-post" onSubmit={(e) => e.preventDefault()}>
+          <input
+            type="text"
+            placeholder="Search by title, city, or country..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </form>
+      </header>
 
-        {post.mainImage && post.mainImage.asset && (
-        <img
-          // Use urlFor to generate the source, define a width, and auto-format to WebP
-          src={urlFor(post.mainImage).width(1200).height(600).url()}
-          alt={post.title}
-        
-        />
-      )}
-
-            {post.locationDetails && (
-              <p >
-                📍 {post.locationDetails.cityName}, {post.locationDetails.countryName}
-              </p>
-            )}
-            <Link
-              to={`/post/${post._id}`}
-             
-            >
-              Read Story →
-            </Link>
-          </article>
-        ))}
-      </div>
-    </div> */}
-      </>
-  )}
+      <section className="posts-container container">
+        {loading ? (
+          <p className="loading-text">Loading travel stories...</p>
+        ) : filteredPosts.length > 0 ? (
+          filteredPosts.map((post) => (
+            <article key={post._id} className="item-card">
+              <figure className="post-img">
+                {post.mainImage && post.mainImage.asset && (
+                  <img
+                    src={urlFor(post.mainImage).width(1200).height(600).url()}
+                    alt={post.title}
+                  />
+                )}
+              </figure>
+              <div className="card-info">
+                {post.locationDetails && (
+                  <h6 className="location">
+                    📍 {post.locationDetails.cityName}, {post.locationDetails.countryName}
+                  </h6>
+                )}
+                <h3 className="post-title">{post.title}</h3>
+                <p className="post-desc">post description</p>
+                <Link
+                  to={`/post/${post._id}`}
+                  title="read more"
+                  className="card-link"
+                ></Link>
+              </div>
+            </article>
+          ))
+        ) : (
+          <p className="no-results">No stories found matching "{debouncedSearchTerm}"</p>
+        )}
+      </section>
+    </>
+  )
+}

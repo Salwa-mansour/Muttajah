@@ -98,7 +98,7 @@ function Nav() {
   }
 
   return (
-    <nav className={`nav ${isHome ? 'home-nav' : ''}`} ref={containerRef}>
+    <nav className={`nav `} ref={containerRef}>
       <Link to="/" className="logo" onClick={handleLinkClick}>
         <img src={logo} alt="logo" />
       </Link>
